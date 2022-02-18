@@ -1,5 +1,3 @@
-# Jim0618.github.io
+**博客网址：https://huanghongxing-jim.github.io**
 
-https://huanghongxing-jim.github.io
-https://jim0618.github.io
-https://github.com/onevcat/vno-jekyll
+**博客主题来源：https://github.com/onevcat/vno-jekyll**
