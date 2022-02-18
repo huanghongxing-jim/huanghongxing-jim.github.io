@@ -1,6 +1,7 @@
 ---
 layout: post
 title: FreeRTOS学习笔记2
+tags: FreeRTOS 学习笔记
 ---
 ## 2. 移植步骤
 

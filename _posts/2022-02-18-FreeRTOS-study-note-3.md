@@ -1,6 +1,7 @@
 ---
 layout: post
 title: FreeRTOS学习笔记3
+tags: FreeRTOS 学习笔记
 ---
 # 三、FreeRTOS系统讲解
 

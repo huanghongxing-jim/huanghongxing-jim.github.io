@@ -16,7 +16,7 @@ title: 姿态识别
 
   采用最先进的姿态估计器（Zhe Cao, Tomas Simon, Shih-En Wei, and Yaser Sheikh. Realtime multi-person 2d pose estimation using part affinity fields.arXiv, 1611.08050, 2016.）来获得近似人体姿态：姿态估计器生成18个关键点的坐标，这些坐标输入到模型中，模型学习将每个关键点映射到人体上的对应位置上。这样，就将PB编码为有18个热力点的图。每一个热力点在对应的关键点附近（半径为4像素的圆）填充了1，而在其他地方都是0。
 
-  ![1532320546222](https://raw.githubusercontent.com/Jim0618/Jim0618.github.io/master/assets/images/pose-guided-person-image-generation-temp/1532320546222.png)
+  ![1532320546222](/assets/images/pose-guided-person-image-generation-temp/1532320546222.png)
 
   ***我的理解是，目标点通过上述的姿态估计器生成关键点，然后连接这些关键点成骨架，再通过形态算法的之类的方法，将骨架变成Target Pose Mask。***
 
@@ -24,7 +24,7 @@ title: 姿态识别
 
   采用U-Net-like结构(Tran Minh Quan, David G. C. Hildebrand, and Won-Ki Jeong. Fusionnet: A deep fully residual convolu-tional neural network for image segmentation in connectomics. arXiv, 1612.05360, 2016.),也就是具有跳跃连接的卷积自动编码器。
 
-  ![1532323894576](https://raw.githubusercontent.com/Jim0618/Jim0618.github.io/master/assets/images/pose-guided-person-image-generation-temp/1532323894576.png)
+  ![1532323894576](/assets/images/pose-guided-person-image-generation-temp/1532323894576.png)
 
   首先**使用了几个堆叠卷积层，从小的局部邻域到更大的区域，整个IA和PB两个图像**。这样，外观信息被整合后并传输到相邻的身体部分。
 

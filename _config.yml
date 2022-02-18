@@ -8,7 +8,7 @@ creator: <a href="http://onev.cat">@onevcat</a>
 avatarTitle: Jim
 # 头像里的描述
 avatarDesc: Studying developer
-url: "http://Jim0618.github.io"
+url: "https://huanghongxing-jim.github.io/"
 
 permalink: /:year/:month/:title/
 
@@ -41,8 +41,8 @@ comment:
     
 # Social
 social:
-    github: Jim0618
-    mail: 2698279519@qq.com
+    github: Huang Hongxing
+    mail: huanghongxingjim@163.com
     
 # Google Analytics
 ga:
