@@ -4,13 +4,11 @@ title: 姿态识别
 ---
 ## 方法
 
-[文章](chrome-extension://cdonnmffkdaoajfknoeeecmchibpmkmg/static/pdf/web/viewer.html?file=https%3A%2F%2Fpapers.nips.cc%2Fpaper%2F6644-pose-guided-person-image-generation.pdf)
-
 有两个阶段，对于第一阶段，提出并分析几个几个模型以及变体，第二阶段，使用附加条件的深度卷积对抗生成网络（DCGAN）的变体来填充更多外观细节。 PG2的总体框架如图所示 ：
 
 ![1532162027739](/assets/images/pose-guided-person-image-generation-temp/1532315270307.png)
 
-## 1. 步骤一，姿势集成
+## 步骤一，姿势集成
 
 在阶段一，将一个筛选过的人的图像（condition person image) IA与一个目标姿势（target post）PB整合在一起，生成一个粗糙结构（coarse result）IB，该结构大致描述了IB中的人体整体结构。 
 
@@ -34,14 +32,12 @@ title: 姿态识别
 
   之后，**解码器和其对应的编码器产生图像**，该解码器由与编码器对称的堆叠卷积层组成。***与编码器对称的堆叠卷积层组成一个解码器。***
 
-  这个图像叫做**`B1**，在U-Net中，编码器和解码器之间的Skip connetciton能将图像信息直接从input传导output。论文中建议简化原始残差块(Kaiming He, Xiangyu Zhang, Shaoqing Ren, and Jian Sun. Deep residual learning for image recognition.
+  这个图像叫做**B1**，在U-Net中，编码器和解码器之间的Skip connetciton能将图像信息直接从input传导output。论文中建议简化原始残差块(Kaiming He, Xiangyu Zhang, Shaoqing Ren, and Jian Sun. Deep residual learning for image recognition.
   In CVPR, pages 770–778, 2016.)和建议只留两个连续的卷积激活函数在残差块（consecutive conv-relu )就好了。
 
 * Pose mask的损失函数***阶段1用的损失函数是L1，主要将背景的权重降低。***
 
-  **网络模型中采用L1损失函数(采用L1距离作为阶段的生成损失)** ==> 为了比较`B1和IB。
-
-  ![1532325862805](C:\Users\ADMINI~1.DES\AppData\Local\Temp\1532325862805.png)**用该公式将MB(pose mask）加到L1损失函数中** ==> 让人较背景有更多的权重，以至于让背景对IB的影响减小。
+  **网络模型中采用L1损失函数(采用L1距离作为阶段的生成损失)** ==> 为了比较B1和IB。
 
   **MB(pose mask)被设置为前景1和背景0；通过连接人体部分和应用一套形态学操作来计算出MB** ==> 使得它能够大致覆盖目标图像中的整个人体。
 
@@ -59,7 +55,7 @@ title: 姿态识别
 
   使用different map加速了模型的收敛，因为模型专注于学习丢失的外观细节，而不是从头开始合成目标图像。
 
-  ![1532351298006](https://raw.githubusercontent.com/Jim0618/Jim0618.github.io/master/assets/images/pose-guided-person-image-generation-temp/1532351298006.png)
+  ![1532351298006](/assets/images/pose-guided-person-image-generation-temp/1532351298006.png)
 
 * 判别网络
 
@@ -68,18 +64,6 @@ title: 姿态识别
   让判别网络判断的是(IA, IB)和(\`IB2, IA)，\`IB2是G2的输出 ==> 这种做法能让判别器学习\`IB2和IB的区别，IB是阶段1的输出。
 
   该判别网络不必加噪声。
-
-  判别器D和生成器G2各自有以下的损失函数：
-
-  ![1532355266208](C:\Users\ADMINI~1.DES\AppData\Local\Temp\1532355266208.png)
-
-  Lbce是 binary cross-entrop损失函数(用于度量两个概率分布之间的相似性).
-
-  G2中用和阶段1中同样的手段使背景对人外观的影响降低。
-
-  ![1532355829041](C:\Users\ADMINI~1.DES\AppData\Local\Temp\1532355829041.png)
-
-  λ是L1损失函数的权重，小 --> 产生伪影；大 --> 图像模糊。
 
   训练GAN过程中，迭代优化D和G2。
 
@@ -101,15 +85,10 @@ G1和G2中的解码器与相应的编码器是对称的。
 
 鉴别器采用了与DCGAN相同的网络结构，除了输入卷积层的大小（因为图像分辨率的不同）。
 
-![1532354339255](https://raw.githubusercontent.com/Jim0618/Jim0618.github.io/master/assets/images/pose-guided-person-image-generation-temp/1532354339255.png)
+![1532354339255](/assets/images/pose-guided-person-image-generation-temp/1532354339255.png)
 
 
-
-
-
-
-
-![1532328045036](https://raw.githubusercontent.com/Jim0618/Jim0618.github.io/master/assets/images/pose-guided-person-image-generation-temp/1532328045036.png)
+![1532328045036](/assets/images/pose-guided-person-image-generation-temp/1532328045036.png)
 
 
 
