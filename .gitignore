@@ -41,3 +41,5 @@ build.sh
 jekyll_notes/
 
 
+_site/feed.xml
+_site/feed.xml
