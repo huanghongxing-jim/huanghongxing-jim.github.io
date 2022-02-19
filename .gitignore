@@ -2,6 +2,7 @@
 # Created by https://www.gitignore.io/api/jekyll,osx
 
 ### Jekyll ###
+_site/
 _site/*
 .sass-cache/*
 .jekyll-metadata/*
@@ -39,17 +40,4 @@ build.sh
 # notes
 jekyll_notes/
 
-# local
-*.lnk
-Tools/
-<<<<<<< HEAD
-!!REMIND
-=======
-for_test
-!!REMIND
-temp*
-cmd*
-/cmd_sec_operate_script.py
-cmd_cmds
-temp.py
->>>>>>> a9f42e39a60257959ac6fcf04cb0913a046f1d4d
+
