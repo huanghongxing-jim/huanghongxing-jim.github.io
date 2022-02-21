@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Spring Boot教程笔记--三、SpringBoot日志
+title: 三、SpringBoot日志（Spring Boot教程笔记5）
 ---
 # 三.SpringBoot日志
 
