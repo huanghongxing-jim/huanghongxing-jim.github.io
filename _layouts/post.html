@@ -6,11 +6,10 @@ layout: default
   <header class="post-header">
     <div class="post-meta">
       <time datetime="{{page.date | date: date_to_xmlschema}}" itemprop="datePublished"
-        class="post-meta__date date">{{page.date | date: "%F"}}</time> &#8226; <span
-        class="post-meta__tags tags">{{page.tag | join:' '}}</span> &#8226; <span class="post-meta__tags tags">{{
-        page.category }}</span>
+        class="post-meta__date date">{{page.date | date: "%F"}}</time> &#8226; <span class="post-meta__tags tags">类别：{{
+        page.category }}</span> &#8226; <span class="post-meta__tags tags">标签：{{page.tag | join:' '}}</span>
     </div>
-    <h1 class="post-title">{{ page.title }}</h1>
+    <h2 class="post-title">{{ page.title }}</h2>
   </header>
 
   <section class="post">
