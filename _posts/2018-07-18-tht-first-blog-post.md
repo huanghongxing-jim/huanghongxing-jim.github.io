@@ -1,6 +1,8 @@
 ---
 layout: post
 title: 欢迎来到我的blog :)
+category: 
+tag: 
 ---
 
 * ### 写blog的初衷

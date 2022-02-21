@@ -1,5 +1,7 @@
 ---
 layout: post
+category: SprintBoot教程笔记
+tag: SpringBoot, 学习笔记 
 title: 三、SpringBoot日志（Spring Boot教程笔记5）
 ---
 # 三.SpringBoot日志

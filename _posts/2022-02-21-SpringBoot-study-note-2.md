@@ -1,5 +1,7 @@
 ---
 layout: post
+category: SprintBoot教程笔记
+tag: SpringBoot, 学习笔记 
 title: 一、Spring Boot入门（Spring Boot教程笔记2）
 ---
 ##  5.Hello World探究

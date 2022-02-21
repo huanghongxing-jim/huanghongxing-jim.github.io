@@ -1,7 +1,8 @@
 ---
 layout: post
+category: FreeRTOS学习笔记
+tag: FreeRTOS, 学习笔记
 title: FreeRTOS学习笔记4
-tags: FreeRTOS 学习笔记
 ---
 **8）任务挂起和恢复：**<img src="/assets/images/FreeRTOS-study/image-20220218005157889.png" alt="image-20220218005157889" style="zoom:67%;" />
 

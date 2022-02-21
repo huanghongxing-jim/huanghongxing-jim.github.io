@@ -1,5 +1,7 @@
 ---
 layout: post
+category: SprintBoot教程笔记
+tag: SpringBoot, 学习笔记 
 title: 五、开发笔记（Spring Boot教程笔记8）
 ---
 # 五、开发笔记

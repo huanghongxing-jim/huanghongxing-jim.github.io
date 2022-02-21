@@ -1,5 +1,7 @@
 ---
 layout: post
+category: 姿态识别
+tag: 深度学习, 姿态识别, 神经网络
 title: 姿态识别
 ---
 ## 方法

@@ -1,5 +1,7 @@
 ---
 layout: post
+category: SprintBoot教程笔记
+tag: SpringBoot, 学习笔记 
 title: 四、Web开发（Spring Boot教程笔记7）
 ---
 ## 4.SpringBootMVC自动配置原理

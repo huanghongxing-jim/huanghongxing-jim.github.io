@@ -1,5 +1,7 @@
 ---
 layout: post
+category: SprintBoot教程笔记
+tag: SpringBoot, 学习笔记 
 title: 二、配置文件（Spring Boot教程笔记3）
 ---
 # 二、配置文件
