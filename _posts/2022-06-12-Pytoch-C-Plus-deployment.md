@@ -7,28 +7,29 @@ title: Pytorch C/C++模型部署
 # 一、环境
 
 1. 系统： `Windows 10`
-2. 软件：`Visual Stuido 2019`+`VSIXTorch.vsix`。**[VSIXTorch.vsix](assets\attachments\network-deployment-pytorch-c\VSIXTorch.vsix)**f只支持到 `Visual Studio 2019`。
-3. 下载 `libtorch`：![](assets\images\network-deployment-pytorch-c/2022-06-12-20-52-53.png)
+2. 软件：`Visual Stuido 2019`+`VSIXTorch.vsix`。**[VSIXTorch.vsix](/assets\attachments\network-deployment-pytorch-c\VSIXTorch.vsix)**f只支持到 `Visual Studio 2019`。
+3. 下载 `libtorch`：![](/assets\images\network-deployment-pytorch-c/2022-06-12-20-52-53.png)
 
 ## 二、例程
 
 [Pytorch C++ API文档资源](https://pytorch.org/cppdocs/)
 
 1. 建立项目，注意`inclue`目录和`lib`目录，以及lib包检测是否附到项目属性上了：
-![](assets\images\network-deployment-pytorch-c/2022-06-12-20-55-33.png)
+![](/assets\images\network-deployment-pytorch-c/2022-06-12-20-55-33.png)
 
-2. 运行：
+2. 运行：  
+
 ```python
 import torch
 import torchvision
 
-model = torchvision.models.assets\images\network-deployment-pytorch-cnet18(pretrained=True)
+model = torchvision.models.resnet18(pretrained=True)
 
 example = torch.rand(1, 3, 224)
 
 traced_script_module = torch.jit.trace(model, example)
 
-traced_script_module.save("traced_assets\images\network-deployment-pytorch-cnet_model.pt")
+traced_script_module.save("traced_resnet_model.pt")
 ```
 
 ```C++
@@ -40,7 +41,7 @@ traced_script_module.save("traced_assets\images\network-deployment-pytorch-cnet_
 int main(int argc, const char* argv[]) {
 
     torch::jit::script::Module model;
-    model = torch::jit::load("traced_assets\images\network-deployment-pytorch-cnet_model.pt", at::kCUDA);
+    model = torch::jit::load("traced_resnet_model.pt", at::kCUDA);
 
     std::vector<torch::jit::IValue> inputs;
     inputs.push_back(torch::ones({ 1, 3, 224, 224 }, at::kCUDA));
