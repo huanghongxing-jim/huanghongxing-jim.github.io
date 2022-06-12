@@ -7,7 +7,7 @@ title: Pytorch C/C++模型部署
 # 一、环境
 
 1. 系统： `Windows 10`
-2. 软件：`Visual Stuido 2019`+`VSIXTorch.vsix`。**[VSIXTorch.vsix](/assets\attachments\network-deployment-pytorch-c\VSIXTorch.vsix)**f只支持到 `Visual Studio 2019`。
+2. 软件：`Visual Stuido 2019`+`VSIXTorch.vsix`。**[VSIXTorch.vsix](/assets\attachments\network-deployment-pytorch-c\VSIXTorch.vsix)** 只支持到 `Visual Studio 2019`。
 3. 下载 `libtorch`：![](/assets\images\network-deployment-pytorch-c/2022-06-12-20-52-53.png)
 
 ## 二、例程
@@ -58,6 +58,7 @@ int main(int argc, const char* argv[]) {
 ## 三、Torch模型部署
 
 > JIT是一种概念，全称是 Just In Time Compilation，中文译为**即时编译**，是一种程序优化的方法。TorchScript（PyTorch的JIT实现）TorchScript是Pytorch模型（继承自nn.Module）的中间表示，可以在像C++这种高性能的环境中运行。**用JIT将Python模型转换为 TorchScript Module。**
+> 
 > 使用Python训练模型，然后通过JIT将模型转为语言无关的模块，从而让C++可以非常方便得调用，从而把PyTorch模型部署到任意平台和设备上：树莓派、iOS、Android等。
 
 [Torchscript文档资源](https://pytorch.org/docs/master/jit.html)  
