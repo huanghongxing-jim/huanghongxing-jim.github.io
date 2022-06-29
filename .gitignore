@@ -40,6 +40,6 @@ build.sh
 # notes
 jekyll_notes/
 
-
 _site/feed.xml
 _site/feed.xml
+*.code-workspace
