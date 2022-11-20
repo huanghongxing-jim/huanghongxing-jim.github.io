@@ -19,31 +19,26 @@ timezone:
 # jekyll-seo-tag settings › https://github.com/jekyll/jekyll-seo-tag/blob/master/docs/usage.md
 # ↓ --------------------------
 
-title: Chirpy                          # the main title
+title: Huang Hongxing                       
 
-tagline: A text-focused Jekyll theme   # it will display as the sub-title
+tagline: "你的朋友圈好久没有提及你的快乐了，你的梦想、浪漫、晚霞和音乐都没了，怎么了？是不是和我一样进厂了？"
 
 description: >-                        # used by seo meta and the atom feed
-  A minimal, responsive, and powerful Jekyll theme for presenting professional writing.
+  Huang Hongxing's Blog.
 
 # fill in the protocol & hostname for your site, e.g., 'https://username.github.io'
-url: ''
+url: https://huanghongxing-jim.github.io
 
 github:
-  username: github_username             # change to your github username
-
-twitter:
-  username: twitter_username            # change to your twitter username
-
+  username: huanghongxing-jim             # change to your github username
 social:
   # Change to your full name.
   # It will be displayed as the default author of the posts and the copyright owner in the Footer
   name: your_full_name
-  email: example@domain.com             # change to your email address
+  email: huanghongxingjim@163.com             # change to your email address
   links:
     # The first element serves as the copyright owner's link
-    - https://twitter.com/username      # change to your twitter homepage
-    - https://github.com/username       # change to your github homepage
+    - https://github.com/huanghongxing-jim       # change to your github homepage
     # Uncomment below to add more social links
     # - https://www.facebook.com/username
     # - https://www.linkedin.com/in/username
