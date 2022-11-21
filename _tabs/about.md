@@ -4,5 +4,10 @@ icon: fas fa-info-circle
 order: 4
 ---
 
-<!-- > Add Markdown syntax content to file `_tabs/about.md`{: .filepath } and it will show up on this page.
-{: .prompt-tip } -->
+本人本科专业是物联网工程，研究生专业是控制科学与工程，目前在国内一家芯片原厂工作。
+
+读书期间跟师弟、同学参与了不少项目，也作为队长带领团队参加了电子设计大赛，都基本获得了不错的荣誉。
+
+这个博客主要用来记录本人学习期间的一些笔记和一些感悟，还有本人单独制作的一些有趣小玩意。
+
+

@@ -47,7 +47,7 @@ title: FreeRTOS学习笔记1
 
 **还需要启动文件：调用SystemInit()，然后进入main()函数。不同型号的芯片启动文件不一样。**
 
-` STM32F4 `的启动文件存放在目录`\STM32F4xx_DSP_StdPeriph_Lib_V1.4.0\Libraries\CMSIS\Device\ST\STM32F4xx\Source\Templates\arm`下面。
+`STM32F4`的启动文件存放在目录`\STM32F4xx_DSP_StdPeriph_Lib_V1.4.0\Libraries\CMSIS\Device\ST\STM32F4xx\Source\Templates\arm`下面。
 
 ### 工程模板（正点原子）
 
@@ -65,28 +65,28 @@ title: FreeRTOS学习笔记1
 
 {% raw %}
 ```c
-    // main.c
-    #include "stm32f4xx.h"
-    void Delay(__IO uint32_t nCount) {
-      while (nCount--) {
-      }
-    }
-    int main(void) {
-      GPIO_InitTypeDef GPIO_InitStructure;
-      RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOF, ENABLE);
-      GPIO_InitStructure.GPIO_Pin = GPIO_Pin_9 | GPIO_Pin_10;
-      GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
-      GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
-      GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
-      GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
-      GPIO_Init(GPIOF, &GPIO_InitStructure);
-      while (1) {
-        GPIO_SetBits(GPIOF, GPIO_Pin_9 | GPIO_Pin_10);
-        Delay(0x7FFFFF);
-        GPIO_ResetBits(GPIOF, GPIO_Pin_9 | GPIO_Pin_10);
-        Delay(0x7FFFFF);
-      }
-    }
+// main.c
+#include "stm32f4xx.h"
+void Delay(__IO uint32_t nCount) {
+  while (nCount--) {
+  }
+}
+int main(void) {
+  GPIO_InitTypeDef GPIO_InitStructure;
+  RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOF, ENABLE);
+  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_9 | GPIO_Pin_10;
+  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
+  GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
+  GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
+  GPIO_Init(GPIOF, &GPIO_InitStructure);
+  while (1) {
+    GPIO_SetBits(GPIOF, GPIO_Pin_9 | GPIO_Pin_10);
+    Delay(0x7FFFFF);
+    GPIO_ResetBits(GPIOF, GPIO_Pin_9 | GPIO_Pin_10);
+    Delay(0x7FFFFF);
+  }
+}
 ```
 {% endraw %}
 <img src="/assets/images/FreeRTOS-study/image-20220216224022065.png" alt="image-20220216224022065" style="zoom:67%;" />
@@ -102,31 +102,31 @@ title: FreeRTOS学习笔记1
 
 9. **便捷通用代码（正点原子）：**delay, sys, usart。这些代码是 STM32F4xx 系列的底层核心驱动函数，可以用在 STM32F4xx系列的各个型号上面，能够快速的给任何一款 STM32F4 构建最基本的框架。
 
-    使用示例（main.c）：
+使用示例（main.c）：
 
 {% raw %}
 ```c
-    #include "delay.h"
-    #include "stm32f4xx.h"
-    #include "usart.h"
-    int main(void) {
-      u32 t = 0;
-      uart_init(115200);
-      delay_init(84); // 84是系统时钟频率
-      while (1) {
-        printf("t:%d\r\n", t);
-        delay_ms(500);
-        t++;
-      }
-    }
+#include "delay.h"
+#include "stm32f4xx.h"
+#include "usart.h"
+int main(void) {
+  u32 t = 0;
+  uart_init(115200);
+  delay_init(84); // 84是系统时钟频率
+  while (1) {
+    printf("t:%d\r\n", t);
+    delay_ms(500);
+    t++;
+  }
+}
 ```
 {% endraw %}
 
-    ![image-20220216232834325](/assets/images/FreeRTOS-study/image-20220216232834325.png)
+![image-20220216232834325](/assets/images/FreeRTOS-study/image-20220216232834325.png)
 
-    串口打印输出：<img src="/assets/images/FreeRTOS-study/image-20220216233759762.png" alt="image-20220216233759762" style="zoom:67%;" />
+串口打印输出：<img src="/assets/images/FreeRTOS-study/image-20220216233759762.png" alt="image-20220216233759762" style="zoom:67%;" />
 
-    **delay.c:**
+**delay.c:**
 
 {% raw %}
 ```c
@@ -347,7 +347,7 @@ title: FreeRTOS学习笔记1
 ```
 {% endraw %}
 
-    **delay.h:**
+**delay.h:**
 
 {% raw %}
 ```c
@@ -377,7 +377,7 @@ title: FreeRTOS学习笔记1
 ```
 {% endraw %}
 
-    **sys.c:**
+**sys.c:**
 
 {% raw %}
 ```c
@@ -426,7 +426,7 @@ title: FreeRTOS学习笔记1
 ```
 {% endraw %}
 
-    **sys.h:**
+**sys.h:**
 
 {% raw %}
 ```c
@@ -505,7 +505,7 @@ title: FreeRTOS学习笔记1
 ```
 {% endraw %}
 
-    **usart.c:**
+**usart.c:**
 
 {% raw %}
 ```c
@@ -648,7 +648,7 @@ title: FreeRTOS学习笔记1
 ```
 {% endraw %}
 
-    **usart.h:**
+**usart.h:**
 
 {% raw %}
 ```c
