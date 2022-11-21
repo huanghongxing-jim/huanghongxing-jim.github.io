@@ -4,7 +4,7 @@ category: [计算机视觉]
 tag: [数字图像处理, 学习笔记]
 title: 数字图像处理学习笔记5
 ---
-{% raw %}
+
 
 **把图像空间按照一定的要求分成一些“有意义”的区域的技术称为图像分割。**
 图像分割基本原理：图像亮度值 ==> （区域之间）不连续性；（区域内部）相似性。
@@ -15,6 +15,7 @@ title: 数字图像处理学习笔记5
 `点`的定义：图像的一个区域，亮度几乎不变。
 ![f7a464b8717957fd18cd624887802ee2.png](/assets/images/image-processing-study-note/Image62.png)
 当模板刚好套在图像A中的点时，该点响应最大，以此来发现这里有一个点。因为其他区域的像素值都0，模板在这些像素的响应值都是0（线性滤波器）；
+{% raw %}
 ```matlab
 f = im2double(rgb2gray(imread('dot.jpg'))); % imfilter的输入图像和输出图像的数据类型一致，
 w = [-1 -1 -1; -1 8 -1; -1 -1 -1];  % 但运算时按float进行运算，故而使用im2double保证不丢失数据。
@@ -22,19 +23,19 @@ g = abs(imfilter(f, w)); % 图像g的每个像素值都是f对应像素点的响
 T = max(g(:)); % 找到图像g中最大的那个值
 g = g >= T; % 位置筛选，图g只有两个值：0和1
 imshow(g); % 值为1的像素显示白点
-
 或者 
-
 g = ordfilt2(f, m*n, ones(m, n)) − ordfilt2(f, 1, ones(m, n)); % 依据不连续性，点 的邻域极差大
 g = g >= T; % 将极差大的像素点筛选出来
 imshow(g);
 ```
+{% endraw %}
 ##### 2. 线检测
 **线检测模板：**![e8c8311bc9a5569e88ab76ef10f10337.png](/assets/images/image-processing-study-note/Image63.png)
 过程和点检测一样。
 **使用霍夫（Hough）变换进行线检测：**
 之前的线检测方法只产生位于边缘上的像素，使用霍夫变换能将这些像素组装成有意义的边缘。
 [Hough变换基本原理](https://www.cnblogs.com/php-rearch/p/6760683.html)：边界上有n个点，这些点构成点集，找到这个点集**共线的子集**及其对应的**直线方程**。
+{% raw %}
 ```matlab
 f = zeros(101, 101);
 f(1, 1) = 1;f(101, 1) = 1; f(1, 101) = 1;
@@ -43,18 +44,15 @@ for i = 25:75
     f(i, i) = 1;
 end
 subplot(231), imshow(f), title('原图');
-
 [H, theta, rho] = hough(f);
 subplot(232), imshow(H, 'XData', ...
     theta, 'YData', rho, 'InitialMagnification', 'fit');
 title('霍夫空间（极坐标）');
 axis on, axis normal; xlabel('\theta'), ylabel('\rho');
-
 peaks = houghpeaks(H, 10);
 hold on;
 plot(theta(peaks(:, 2)), rho(peaks(:, 1)), ...
     'linestyle', 'none', 'marker', 's', 'color', 'g');
-
 lines = houghlines(f, theta, rho, peaks);
 subplot(233), imshow(f), title('边缘连线'), hold on;
 for k = 1:length(lines)
@@ -63,6 +61,7 @@ for k = 1:length(lines)
         'Color', [.8 .8 .8]);
 end
 ```
+{% endraw %}
 ![c722149a5e32485bdf3c716d01747b3a.png](/assets/images/image-processing-study-note/Image64.png)
 ![25cc99bd4c725054eb73d50a5ede8222.png](/assets/images/image-processing-study-note/Image65.png)
 `Matlab`霍夫变换步骤：`hough`进行霍夫变换，将原图映射到霍夫空间里；`houghpeaks`在霍夫空间里求出峰值；`houghlines`检测是否有与峰值相关的**有意义的的线段**，如果有，找出这些线段。
@@ -74,6 +73,7 @@ end
 使用阈值将图像按灰度值划分区域。
 ##### 1. 全局阈值处理
 要求：目标和背景的灰度差较大，直方图有明显谷底。![4b6b990de7e17a9ebcdc60e589f31261.png](/assets/images/image-processing-study-note/Image67.png)
+{% raw %}
 ```matlab
 # globalThreshold.m
 function [T, count] = globalThreshold(f, threshold)
@@ -91,7 +91,6 @@ function [T, count] = globalThreshold(f, threshold)
         T = Tnext;
     end
 end
-
 # main.m
 f = rgb2gray(imread('test.jpg'));
 [T, c] = globalThreshold(f);
@@ -101,6 +100,7 @@ subplot(222), imhist(f);
 subplot(223), imshow(g);
 subplot(224), histogram(f, 256);
 ```
+{% endraw %}
 ![e6472b8c1a644537521a8c08de42cbb0.png](/assets/images/image-processing-study-note/Image68.png)
 `imhist`和`histogram`的区别：`imhist`的`NumBins`值是由图像类型决定的。若图像为`uint8`类型，则`bin`的数量为`256`，即`[0:1:255]`。`histogram`的`NumBins`值可以人为设定，在未指定该参数时，系统将基于图像的灰度分布自动计算`NumBins`的值。（`bin`是直条，`NumBins`是直条数量）
 **OTSU算法（大津法、最大类间方差法）：**
@@ -121,6 +121,7 @@ subplot(224), histogram(f, 256);
 ##### 2. 局部阈值处理
 ![a4d644e6fd034b0128207b30727134a8.png](/assets/images/image-processing-study-note/Image72.png)
 ![7f423e6659e1be439e31e149b35b7ea4.png](/assets/images/image-processing-study-note/Image73.png)
+{% raw %}
 ```matlab
 # localthresh.m 计算每个像素点的局部标准差和局部均值，然后加权相加，计算出局部阈值
 function g = localthresh(f, nhood, a, b, meantype)
@@ -134,7 +135,6 @@ function g = localthresh(f, nhood, a, b, meantype)
     end
     g = (f > a * sig) & ( f > b * mean);
 end
-
 # localmean.m 使用均值滤波计算每个像素的局部均值
 function mean = localmean(f, nhood)
     if nargin == 1
@@ -145,7 +145,9 @@ function mean = localmean(f, nhood)
     mean = imfilter(im2double(f), nhood, 'replicate');
 end
 ```
+{% endraw %}
 **移动平均的局部阈值处理：** 以一幅图像的扫描行计算移动平均为基础，能减少光照偏差。当感兴趣的物体与图像尺寸相比较小(或较细)时，该处理方法效果很好，譬如：**打印图像和手写文本图像**。
+{% raw %}
 ```matlab
 # movingthresh.m
 function g = movingthresh(f, n, K)
@@ -167,6 +169,7 @@ function g = movingthresh(f, n, K)
     g(2:2:end, :) = fliplr(g(2:2:end, :));
 end
 ```
+{% endraw %}
 ![29f5e3fb31986ef1e7a9c81a37292092.png](/assets/images/image-processing-study-note/Image74.png)
 ### 三、基于区域的分割
 **原理：寻找区域。**
@@ -177,6 +180,7 @@ end
 相似度准则：灰度级相似，纹理相似，颜色相似。
 **灰度级相似准则**：某点像素a，如果发现a邻域里有个像素b的值和它差不多（`abs(a-b) < 阈值`），则将a和b归为同一区域。
 ![abd7e453eb69badcc7840a2310e707ce.png](/assets/images/image-processing-study-note/Image75.png)
+{% raw %}
 ```matlab
 # regiongrow.m 灰度级相似准则
 function [g, NR, SI, TI] = regiongrow(f, S, T)
@@ -203,6 +207,7 @@ function [g, NR, SI, TI] = regiongrow(f, S, T)
     [g, NR] = bwlabel(imreconstruct(SI, TI));
 end
 ```
+{% endraw %}
 ![d4395d2a21346b19c3524bc4dfa1b438.png](/assets/images/image-processing-study-note/Image76.png)
 ##### 2. 区域分裂与合并
 **基本思路：类似于微分，即无穷分割，然后将分割后满足相似度准则的区域进行合并。**
@@ -210,4 +215,4 @@ end
 `Matlab`里用于图像分裂的方法是[四叉树分解](https://www.cnblogs.com/vegetable/p/4113936.html)，函数是`qtdecomp(f, thresh)`，`thresh`是分裂的阈值，输出是一个稀疏矩阵。将该稀疏矩阵聚合用函数`full()`（`full()`：将稀疏矩阵转换为满矩阵）。**使用四叉树分解图像，要先保证该图像为维度2的方形矩阵，矩阵宽度为2的倍数（16, 32, 64, 512 ...）。**
 ![fb57cb13a4b9b09a9185b207ea86a530.png](/assets/images/image-processing-study-note/Image78.png)
 
-{% endraw %}  
+

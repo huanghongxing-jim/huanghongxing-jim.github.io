@@ -4,7 +4,7 @@ category: [SprintBoot教程笔记]
 tag: [SpringBoot, 学习笔记] 
 title: 三、SpringBoot日志（Spring Boot教程笔记5）
 ---
-{% raw %}
+
 
 # 三.SpringBoot日志
 
@@ -30,11 +30,11 @@ SpringBoot:底层是Spring框架，Spring框架默认是用JCL。**SpringBoot选
 
 日志记录方法的调用，不应该直接调用日志的实现类，而是调用日志抽象层里面的方法。
 
+{% raw %}
 ```java
 // slf4j的使用方法：给系统导入slf4j的抽象jar和logback的实现jar
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 public class Temp {
     public static void main(String[] args) {
         Logger logger = LoggerFactory.getLogger(Temp.class);
@@ -42,6 +42,7 @@ public class Temp {
     }
 }
 ```
+{% endraw %}
 
 **注：IDEA中“public static void main(String[] args) {}”快捷键：“psvm”。**
 
@@ -79,12 +80,14 @@ public class Temp {
 
 SpringBoot使用logging场景启动器做日志功能：
 
+{% raw %}
 ```xml
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-logging</artifactId>
 		</dependency>
 ```
+{% endraw %}
 
 logging场景启动器的依赖关系：
 
@@ -108,6 +111,7 @@ starter-logging依赖logback-classic(logback-classsic还依赖logback-core，使
 
 SpringB默认帮我们配置好了日志，所以我们直接使用就行：
 
+{% raw %}
 ```java
 	// 1.声明一个log记录器logger
 	Logger logger = LoggerFactory.getLogger(getClass());
@@ -120,18 +124,22 @@ SpringB默认帮我们配置好了日志，所以我们直接使用就行：
 		logger.error("..."); // error日志，错误
 	}
 ```
+{% endraw %}
 
 日志级别：tarce < debug< info < warn < error。我们可以调整输出的日志级别，调整好，日志就只会输出该级别和更高级别的日志信息。SpringBoot默认设置的是info级别。
 
 将com.example包里的程序日志级别都调到trace，其他包没有指定级别的默认采用info级别：
 
+{% raw %}
 ```properties
 # applicaion.properties
 logging.level.com.example=trace
 ```
+{% endraw %}
 
 logging.path和logging.file:
 
+{% raw %}
 ```properties
 # application.properties
 # 没有指定路径，所以logging.file=springboot.log在当前项目下产生springboot.log日志
@@ -140,17 +148,21 @@ logging.file=springboot.log
 # 指定了完整路径
 logging.file=G:/springboot.log
 ```
+{% endraw %}
 
 **logging.path和logging.file不能同时使用。**
 
+{% raw %}
 ```properties
 # application.properties
 # 在当前磁盘根目录路径下创建spring/log/文件夹，在文件夹中使用spring.log作为日志文件
 logging.path=/spring/log
 ```
+{% endraw %}
 
 规定格式：
 
+{% raw %}
 ```properties
 # application.properties
 # 在控制台中输出的日志格式
@@ -158,6 +170,7 @@ logging.pattern.console=%d{yyyy-MM-dd} [%thread] %-5level %logger{50} - %msg%n
 # 在指定文件中日志输出的格式
 logging.pattern.file=%d{yyyy-MM-dd} === [%thread] ====%-5level === %logger{50} === %msg%n
 ```
+{% endraw %}
 
 ![2018-08-03_140534.png](/assets/images/spring-boot-develop/2018-08-03_140534.png)
 
@@ -175,11 +188,13 @@ loback.xml是自定义的日志框架的配置文件，直接放在类路径下�
 
 SpringBoot推荐带有`-spring`的配置文件，譬如，推荐使用`logback-spring.xml`而不是`logback.xml`。如果使用`logback.xml`,那就会直接被日志框架识别了，而使用`logback-spring.xml`，日志框架不直接加载日志的配置项，而由SpringBoot解析日志配置，这样，我们能在该配置文件使用一些SpringBoot的高级springProfile功能：
 
+{% raw %}
 ```xml
 <springProfile name="staging">
 	<!--这个配置可以指定某段配置只在某个环境生效-->
 </springProfile>
 ```
+{% endraw %}
 
 而如果不加`-spring`而直接使用`<springProfile></springProfile>`的话就会报错。
 
@@ -189,4 +204,4 @@ SpringBoot推荐带有`-spring`的配置文件，譬如，推荐使用`logback-s
 
 同理，切换日志框架只需在`pom.xml`里更换依赖即可，注意如果原先有自定义的配置文件，需将它移除，再写切换后的日志框架对应的配置文件。
 
-{% endraw %}  
+

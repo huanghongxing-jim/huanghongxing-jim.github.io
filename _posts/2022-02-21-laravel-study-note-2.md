@@ -4,7 +4,7 @@ category: [Larave学习笔记]
 tag: [Larave, 学习笔记]
 title: Larave学习笔记2
 ---
-{% raw %}  
+
 
 ## 2.数据库操作
 
@@ -14,13 +14,16 @@ title: Larave学习笔记2
 
 打开config/database.php,找到：
 
+{% raw %}
 ```php
 // 表示默认要连接的数据库是mysql
 'default' => env('DB_CONNECTION', 'mysql'),
 ```
+{% endraw %}
 
 再往下找到：
 
+{% raw %}
 ```php
 // 下面的env(..., ...)其实就是根目录的.env文件里的信息
 'mysql' => [
@@ -38,9 +41,11 @@ title: Larave学习笔记2
     'engine' => null,
 ],
 ```
+{% endraw %}
 
 打开.env,找到:
 
+{% raw %}
 ```php
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
@@ -49,6 +54,7 @@ DB_DATABASE=laravel5
 DB_USERNAME=root
 DB_PASSWORD=
 ```
+{% endraw %}
 
 数据库连接完成。
 
@@ -56,37 +62,33 @@ DB_PASSWORD=
 
 CURD：增删改查
 
+{% raw %}
 ```php
 // App/Http/Controllers/ArticleController.php，控制器里操作数据库
 <?php
-
 namespace App\Http\Controllers;
 use App\Article;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-
 class ArticleController extends Controller
 {
     public function operate(){
         // 插入
         $bool = DB::insert('insert into student(name, age) value(?, ?)', ['Jim', 18]);
         var_dump($bool); // 返回插入成不成功的值，true或false
-        
         // 更新
         $num = DB::update('update student set age = ? where name = ?', [20, 'Jim']);
         var_dump($num); // 返回修改的行数
-        
         // 查询
         $students = DB::select('select * from student where id > ?', [1001]);
         dd($students); // 返回查询结果，是个数组
-        
         // 删除
         $num = DB::delete('delete from student where id > ?', [1001]);
         var_dump($num); // 返回被删除的行数
-
     }
 }
 ```
+{% endraw %}
 
 var_dump(), dd()，都是调试代码，都能将()里的东西打印出来。
 
@@ -94,6 +96,7 @@ var_dump(), dd()，都是调试代码，都能将()里的东西打印出来。
 
 #### 1.新增数据
 
+{% raw %}
 ```php
 // App/Http/Controllers/HomeController.php
 public function query(){
@@ -114,9 +117,11 @@ public function query(){
         );
     }
 ```
+{% endraw %}
 
 #### 2.更新数据
 
+{% raw %}
 ```php
 // App/Http/Controllers/HomeController.php   
 public function query(){
@@ -135,9 +140,11 @@ public function query(){
             ->decrement('age', 3, ['name' => 'Jim']);
     }
 ```
+{% endraw %}
 
 #### 3.删除数据 
 
+{% raw %}
 ```php
 // App/Http/Controllers/HomeController.php    
 public function query(){
@@ -153,11 +160,13 @@ public function query(){
         DB::table('student')->truncate();
     }
 ```
+{% endraw %}
 
 #### 4.查询数据
 
 get(), first(), where(), pluck(), lists(), select(), chunk().
 
+{% raw %}
 ```php
 // App/Http/Controllers/HomeController.php  
 public function query(){
@@ -195,11 +204,13 @@ public function query(){
         });
     }
 ```
+{% endraw %}
 
 #### 5.聚合函数
 
 count(), avg(), max(), sum(), min().
 
+{% raw %}
 ```php
 // App/Http/Controllers/HomeController.php 
 public function query(){
@@ -215,6 +226,7 @@ public function query(){
         $sum = DB::table('student')->sum('age');
     }
 ```
+{% endraw %}
 
 ### 4.Eloauent ORM
 
@@ -224,23 +236,20 @@ public function query(){
 
 在App下面创建一个Student的model类：
 
+{% raw %}
 ```php
 <?php
-
 namespace App;
-
 use Illuminate\Database\Eloquent\Model;
-
 class Student extends Model
 {
     // 指定表名，没有指定的话，默认为该模型的复数即students
     protected $table = 'student';
-
     // 指定主键，默认是表中的id字段
     protected $primaryKey = 'id';
-
 }
 ```
+{% endraw %}
 
 这样，一个model就创建好了。
 
@@ -248,11 +257,10 @@ class Student extends Model
 
 在model对应的controller中使用model。
 
+{% raw %}
 ```php
 <?php
-
 namespace App\Http\Controllers;
-
 class StudentController
 {
     public function orm() {
@@ -265,56 +273,47 @@ class StudentController
     }
 }
 ```
+{% endraw %}
 
 在ORM中使用查询构造器：
 
+{% raw %}
 ```php
 <?php
-
 namespace App\Http\Controllers;
-
 class StudentController
 {
     public function orm() {
         // 查询所有，返回一个集合collection
         $student = Student::get();
-        
         $student = Student::where('id', '>', '34')
             ->orderBy('age', 'desc')
             ->first();
-        
         Student::chunk(2, function($stuent){
             var_dump($student);
         });
-        
         $num = Student::count();
-        
         $max = Student::where('id', '>', 1002)->max('age');
-              
     }
 }
 ```
+{% endraw %}
 
 #### 3. 自定义时间戳及批量赋值
 
+{% raw %}
 ```php
 // Student model
 // App/Student.php
 <?php
-
 namespace App;
-
-
 use Illuminate\Database\Eloquent\Model;
-
 class Student extends Model
 {
     // 指定表名，没有指定的话，默认为该模型的复数即students
     protected $table = 'student';
-
     // 指定主键，默认是表中的id字段
     protected $primaryKey = 'id';
-
     // 一般情况下模型对象向数据库增加数据时还会附加一个时间戳，
     // 如果不想要，在这里将$timestamps设置为false即可
     protected $timestamps = true;
@@ -331,19 +330,17 @@ class Student extends Model
     }
 }
 ```
+{% endraw %}
 
+{% raw %}
 ```php
 // 在StudentConller这个控制器中操纵Student这个model
 // App/Http/Controllers/StudentConller.php
 <?php
-
 namespace App\Http\Controllers;
-
-
 class StudentController
 {
     public function orm() {
-
         $student = new Student();
         $student->name = 'Jim';
         $student->age = 12;
@@ -354,16 +351,15 @@ class StudentController
     }
 }
 ```
+{% endraw %}
 
 批量赋值数据：
 
+{% raw %}
 ```php
 // App/Http/Controllers/StudentConller.php
 <?php
-
 namespace App\Http\Controllers;
-
-
 class StudentController
 {
     public function orm() {
@@ -374,33 +370,32 @@ class StudentController
     }
 }
 ```
+{% endraw %}
 
+{% raw %}
 ```php
 // App/Student.php
 <?php
-
 namespace App;
-
 use Illuminate\Database\Eloquent\Model;
-
 class Student extends Model
 {    // 指定允许批量赋值的model的字段，然后controller里就可以
     // 用model的create()批量赋值数据
     protected $fillable = ['name', 'age'];
-
     // 指定不允许批量赋值的model的字段
     protected $guarded = [];
 }
 ```
+{% endraw %}
 
 其他新增数据的方法：
 
+{% raw %}
 ```php
 // 以字段查找某个元组，如果没有那就创建
 $student = Student::firstOrCreate(
     ['name' => 'Jim']
 );
-
 // 以字段查找某个元组，如果没有那就创建
 $student = Student::firstOrNew(
     ['name' => 'Jim']
@@ -409,17 +404,16 @@ $student = Student::firstOrNew(
 // 则自己编写以下的保存代码,返回是个bool，即保存成不成功
 $bool = $student->save();
 ```
+{% endraw %}
 
 #### 4.修改数据
 
+{% raw %}
 ```php
 // App/Http/Controllers/StudentConller.php
 <?php
-
 namespace App\Http\Controllers;
-
 use App\Student;
-
 class StudentController
 {
     public function orm() {
@@ -435,26 +429,27 @@ class StudentController
     }
 }
 ```
+{% endraw %}
 
 #### 5.删除数据
 
+{% raw %}
 ```php
 public function orm() {
     // 1.通过模型删除,返回一个代表删除成不成功的$bool
     $student = Student::find(201);
     $bool = $student->delete(); // 删除不到这个元组就会报错
-
     // 2.通过主键删除,返回删除的行数，即一个删除了几行
     $num = Student::destroy(1021);
     // 删除多个id的元组：
     $num = Student::destroy(1021, 33);
     // 或者：
     $num = Student::destroy([2021, 33]);
-
     // 3.通过查询语句删除,返回删除的行数
     $num = Student::where('id', '>', 23)->delete();
 }
 ```
+{% endraw %}
 
 ## 3.Blade模板
 
@@ -464,28 +459,28 @@ public function orm() {
 
 父模板(views.layouts)：
 
+{% raw %}
 ```php
 // resources/views/layouts.blade.php
 {{--@section,展示片段内容--}}
 @section('header')
     头部
 @show
-
 @section('sidebar')
     侧边栏
 @show
-
 {{--@yield，展示字符串内容--}}
 @yield('content', '主要内容')
 ```
+{% endraw %}
 
 子模板(views.student.child):
 
+{% raw %}
 ```php
 // resources/views/student/child.blade.php
 {{--1.继承哪个模板--}}
 @extends('layouts')
-
 {{--2.替换父模板中@section的header内容，输出父模板对应地方的父内容--}}
 @section('header')
     @parent
@@ -496,24 +491,21 @@ public function orm() {
 @section('sidebar')
     sidebar
 @stop
-
 {{--3.替换父模板中@yield的content内容--}}
 @section('content')
     content
 @stop
 ```
+{% endraw %}
 
 controller中访问的是子模板：
 
+{% raw %}
 ```php
 // App/Http/Controllers/StudentController.php
 <?php
-
 namespace App\Http\Controllers;
-
-
 use App\Student;
-
 class StudentController
 {
     public function view() {
@@ -521,14 +513,15 @@ class StudentController
     }
 }
 ```
+{% endraw %}
 
 ### 2.基础语法：
 
+{% raw %}
 ```php
 {{--resources/views/student/child.blade.php--}}
 {{--1.模板中输出PHP变量，该变量由控制器传入--}}
 {{ $name }}
-
 {{--2.模板中调用PHP代码,$name和$arr两个变量都由控制器中传进来--}}
 {{ time() }}
 {{ date('Y-m-d H:i:s', time()) }}
@@ -538,21 +531,20 @@ class StudentController
 {{ isset($name) ? $name: 'default' }}
 {{--或者--}}
 {{ $name or 'default' }}
-
 {{--3.原样输出，视图渲染时输出{{ $name }}--}}
 @{{ $name }}
-
 {{--4.模板注释--}}
 {{--xxxx--}}
-
 {{--5.子模板中引入子视图--}}
 @include('student.common')
 {{--子视图中有占位符$msg,在这里将msg赋值并传给子视图--}}
 @include('student.common', ['msg' => 'error'])
 ```
+{% endraw %}
 
 控制器传入值：
 
+{% raw %}
 ```php
 class StudentController
 {
@@ -566,20 +558,23 @@ class StudentController
     }
 }
 ```
+{% endraw %}
 
 子视图：
 
+{% raw %}
 ```php
 {{--resources/views/student/common.blade.php--}}
 {{--$msg是个占位符，等着别处传过来值给它赋值--}}
 {{ $msg }}
 ```
+{% endraw %}
 
 ### 3.模板中流程控制
 
+{% raw %}
 ```php
 {{--resources/vies/student/child.blade.php--}}
-
 {{--if--}}
 @if ($name == 'Jim')
     Jim
@@ -588,22 +583,18 @@ class StudentController
 @else
     b
 @endif
-
 {{--unless,相当于if的取反--}}
 @unless( $name == 'Jim' )
     output Jim
 @endunless
-
 {{--for--}}
 @for ($i=0; $i<2; $i++)
     <p>{{ $i }}</p>
 @endfor
-
 {{--foreach,遍历对象列表或者数组--}}
 @foreach($students as $student) {{--该$student对象列表由控制器传入--}}
     <p>{{ $student->name }}</p> {{--返回$student对象的name属性--}}
 @endforeach
-
 {{--forelse--}}
 @forelse($students as $student)
     <p>{{ $student->name }}</p>
@@ -611,16 +602,15 @@ class StudentController
     <p>null</p>
 @endforelse
 ```
+{% endraw %}
 
 控制器中将对象数组传给视图：
 
+{% raw %}
 ```php
 <?php
-
 namespace App\Http\Controllers;
-
 use App\Student;
-
 class StudentController
 {
     public function view() {
@@ -633,18 +623,22 @@ class StudentController
     }
 }
 ```
+{% endraw %}
 
 ### 4.模板中url
 
 路由：
 
+{% raw %}
 ```php
 // 路由名字：urlTest， 路由别名：urlAlias， 控制器及方法：StudentController@urlTest 
 Route::any('urlTest', ['as' => 'urlAlias', 'uses' => 'StudentController@urlTest']);
 ```
+{% endraw %}
 
 模板中生成url：
 
+{% raw %}
 ```php
 {{--resources/views/student/child.blade.php--}}
 {{--1.指定的路由名字--}}
@@ -654,5 +648,6 @@ Route::any('urlTest', ['as' => 'urlAlias', 'uses' => 'StudentController@urlTest'
 {{--3.路由的别名--}}
 <a href="{{ route('urlAlias') }}">This is url.</a>
 ```
+{% endraw %}
 
-{% endraw %}  
+

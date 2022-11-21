@@ -4,7 +4,7 @@ category: [计算机视觉]
 tag: [数字图像处理, 学习笔记]
 title: 数字图像处理学习笔记1
 ---
-{% raw %}
+
 
 ### 1. 概述
 1. 什么是 **数字图像处理**:
@@ -63,6 +63,7 @@ BMP GIF TIFF JPEG
 ![63705c009cf5959bf7878114ae0170bb.png](/assets/images/image-processing-study-note/Image8.png)
 ### 4. MATLAB基础
 1. 
+{% raw %}
 ```matlab
 close all; % 关闭所有窗口
 clear all; % 清空变量
@@ -74,15 +75,19 @@ set(0, "defaultFigureColor", [1 1 1]); % set()的第二个参数不是乱写的
 subplot(121), imshow(x); % 121 ==> 1行2列，我排第1列
 subplot(122), imshow(I);
 ```
+{% endraw %}
 效果：
 ![0016c2c004fc32fc29d50d26f3affe23.png](/assets/images/image-processing-study-note/Image9.png)
 2. 
+{% raw %}
 ```matlab
 % 显示两个窗口
 figure, imshow(x1);
 figure, imshow(x2); 
 ```
+{% endraw %}
 3. 二值化
+{% raw %}
 ```matlab
 I = imread('test.jpg'); 
 bw1 = im2bw(I, 0.5); % 图像二值化，阈值0.4
@@ -92,11 +97,13 @@ figure; % 开一个窗口
 subplot(131), imshow(I);
 subplot(132), imshow(bw1);
 ```
+{% endraw %}
 4. 
 ![a3164b21de94b3a219723a3b380bca84.png](/assets/images/image-processing-study-note/Image10.png)
 ![1057bb9aebbf5db46ad3c6f46a6e52c4.png](/assets/images/image-processing-study-note/Image11.png)
 5. 直方图均衡化
 test.bmp是8位存储的图像，则其每个元素的灰度值取值范围是[0, 256]，但是用imhist查看其灰度值分布时会发现图像的灰度值是限制在比[0, 256]更小的范围内，这看起来会显得对比度不强，用histeq将这个范围扩大到[0, 256]，尽量保证这个大范围的每个值都有用到，也就是均衡化，能让图像对比度变强。
+{% raw %}
 ```matlab
 i = imread('test.bmp');
 imhist(i); 
@@ -104,12 +111,16 @@ i1 = histeq(i);
 figure, imshow(i);
 figure, imshow(i1);
 ```
+{% endraw %}
 ![2999ccb855f1281a9580dbc5b7cf3359.png](/assets/images/image-processing-study-note/Image12.png)
 6. 文件信息：
+{% raw %}
 ```matlab
 ans = imfinfo('test.bmp');
 ```
+{% endraw %}
 7. 
+{% raw %}
 ```matlab
 i =imread('test.png'); % 1. 原图
 bg = imopen(i, strel('disk', 15)); % 5. 使用半径为15的圆盘消除白色物体，获取背景
@@ -117,10 +128,11 @@ fg = imsubtract(i, bg); % 2. 与原图像相减获取前景
 fg_contrast = imadjust( fg, stretchlim(fg), [0 1]); % 3. 调整前景对比度
 fg_contrast_bw = im2bw( fg_contrast, graythresh( fg_contrast ) ); % 4. 将前景图像转化为二值图像
 ```
+{% endraw %}
 ![4a4a0d4f60daac5da1294e15becd1382.png](/assets/images/image-processing-study-note/Image13.png)
 
 
-{% endraw %}  
+
 
 
 

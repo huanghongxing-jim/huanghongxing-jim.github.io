@@ -16,12 +16,14 @@ title: FreeRTOS学习笔记3
 
 * `configASSERT`：需要自己定义，一般调试阶段用，会加大开销，用于检测传入的参数是否合理，参数为0则错误：
 
-    ```c
+{% raw %}
+```c
     // 断言，将错误打印出来 
     // 当参数 x 错误的时候就通过串口打印出发生错误的文件名和错误所在的行号，调试代码的时候可以使用断言，当调试完成以后尽量去掉断言，防止增加开销
     #define vAssertCalled(char,int) printf("Error:%s,%d\r\n",char,int)
     #define configASSERT(x) if((x)==0) vAssertCalled(__FILE__,__LINE__)
-    ```
+```
+{% endraw %}
 
 * `configCHECK_FOR_STACK_OVERFLOW`：检测堆栈是否溢出，堆栈溢出检测会增加上下文切换的开销，建议在调试的时候使用。使用`xTaskCreate()`则所创建的任务**自动**从FreeRTOX系统的堆`ucHeap`分配，堆栈大小由该函数`usStackDepth`决定；使用`xTaskCreateStatic()`则任务堆栈数组`pxStackBuffer`由用户设置。FreeRTOS使用两种方法来检测堆栈溢出(`#define configCHECK_FOR_STACK_OVERFLOW 1`和`#define configCHECK_FOR_STACK_OVERFLOW 2`)，方法1速度更快，方法2能检测到的堆栈溢出情况更多，该配置不为0时需要自定义`void vApplicationStackOverflowHook(TaskHandle_t xTask, char * pcTaskName);`函数，当内核检测到堆栈溢出以后就会调用该函数，`xTask`是任务句柄，`pcTaskNmae`是任务名字。**任务上下文切换时任务的现场数据都被保存到这个任务的堆栈里。**
 
@@ -104,12 +106,11 @@ title: FreeRTOS学习笔记3
 
 * `configUSE_TRACE_FACILITY`：为 1 启用可视化跟踪调试，会增加一些结构体成员和 API 函数。
 
+{% raw %}
 ```c
 // FreeRTOS V9.0.0
-
 #ifndef FREERTOS_CONFIG_H
 #define FREERTOS_CONFIG_H
-
 #include "sys.h"
 #include "usart.h"
 //针对不同的编译器调用不同的stdint.h文件
@@ -117,13 +118,11 @@ title: FreeRTOS学习笔记3
 #include <stdint.h>
 extern uint32_t SystemCoreClock;
 #endif
-
 //断言
 #define vAssertCalled(char, int) printf("Error:%s,%d\r\n", char, int)
 #define configASSERT(x) \
     if ((x) == 0)       \
     vAssertCalled(__FILE__, __LINE__)
-
 /***************************************************************************************************************/
 /*                                        FreeRTOS基础配置配置选项                                              */
 /***************************************************************************************************************/
@@ -139,7 +138,6 @@ extern uint32_t SystemCoreClock;
 #define configMAX_PRIORITIES (32)                      //可使用的最大优先级
 #define configMINIMAL_STACK_SIZE ((unsigned short)130) //空闲任务使用的堆栈大小
 #define configMAX_TASK_NAME_LEN (16)                   //任务名字字符串长度
-
 #define configUSE_16_BIT_TICKS 0         //系统节拍计数器变量数据类型，
                                          // 1表示为16位无符号整形，0表示为32位无符号整形
 #define configIDLE_SHOULD_YIELD 1        //为1时空闲任务放弃CPU使用权给其他同优先级的用户任务
@@ -154,19 +152,16 @@ extern uint32_t SystemCoreClock;
 #define configUSE_MALLOC_FAILED_HOOK 0   // 1使用内存申请失败钩子函数
 #define configUSE_APPLICATION_TASK_TAG 0
 #define configUSE_COUNTING_SEMAPHORES 1 //为1时使用计数信号量
-
 /***************************************************************************************************************/
 /*                                FreeRTOS与内存申请有关配置选项                                                */
 /***************************************************************************************************************/
 #define configSUPPORT_DYNAMIC_ALLOCATION 1          //支持动态内存申请
 #define configTOTAL_HEAP_SIZE ((size_t)(20 * 1024)) //系统所有总的堆大小
-
 /***************************************************************************************************************/
 /*                                FreeRTOS与钩子函数有关的配置选项                                              */
 /***************************************************************************************************************/
 #define configUSE_IDLE_HOOK 0 // 1，使用空闲钩子；0，不使用
 #define configUSE_TICK_HOOK 0 // 1，使用时间片钩子；0，不使用
-
 /***************************************************************************************************************/
 /*                                FreeRTOS与运行时间和任务状态收集有关的配置选项                                 */
 /***************************************************************************************************************/
@@ -175,13 +170,11 @@ extern uint32_t SystemCoreClock;
 #define configUSE_STATS_FORMATTING_FUNCTIONS 1 //与宏configUSE_TRACE_FACILITY同时为1时会编译下面3个函数
                                                // prvWriteNameToBuffer(),vTaskList(),
                                                // vTaskGetRunTimeStats()
-
 /***************************************************************************************************************/
 /*                                FreeRTOS与协程有关的配置选项                                                  */
 /***************************************************************************************************************/
 #define configUSE_CO_ROUTINES 0             //为1时启用协程，启用协程以后必须添加文件croutine.c
 #define configMAX_CO_ROUTINE_PRIORITIES (2) //协程的有效优先级数目
-
 /***************************************************************************************************************/
 /*                                FreeRTOS与软件定时器有关的配置选项                                            */
 /***************************************************************************************************************/
@@ -189,7 +182,6 @@ extern uint32_t SystemCoreClock;
 #define configTIMER_TASK_PRIORITY (configMAX_PRIORITIES - 1)        //软件定时器优先级
 #define configTIMER_QUEUE_LENGTH 5                                  //软件定时器队列长度
 #define configTIMER_TASK_STACK_DEPTH (configMINIMAL_STACK_SIZE * 2) //软件定时器任务堆栈大小
-
 /***************************************************************************************************************/
 /*                                FreeRTOS可选函数配置选项                                                      */
 /***************************************************************************************************************/
@@ -203,7 +195,6 @@ extern uint32_t SystemCoreClock;
 #define INCLUDE_vTaskDelay 1
 #define INCLUDE_eTaskGetState 1
 #define INCLUDE_xTimerPendFunctionCall 1
-
 /***************************************************************************************************************/
 /*                                FreeRTOS与中断有关的配置选项                                                  */
 /***************************************************************************************************************/
@@ -212,20 +203,18 @@ extern uint32_t SystemCoreClock;
 #else
 #define configPRIO_BITS 4
 #endif
-
 #define configLIBRARY_LOWEST_INTERRUPT_PRIORITY 15     //中断最低优先级
 #define configLIBRARY_MAX_SYSCALL_INTERRUPT_PRIORITY 5 //系统可管理的最高中断优先级
 #define configKERNEL_INTERRUPT_PRIORITY (configLIBRARY_LOWEST_INTERRUPT_PRIORITY << (8 - configPRIO_BITS))
 #define configMAX_SYSCALL_INTERRUPT_PRIORITY (configLIBRARY_MAX_SYSCALL_INTERRUPT_PRIORITY << (8 - configPRIO_BITS))
-
 /***************************************************************************************************************/
 /*                                FreeRTOS与中断服务函数有关的配置选项                                          */
 /***************************************************************************************************************/
 #define xPortPendSVHandler PendSV_Handler
 #define vPortSVCHandler SVC_Handler
-
 #endif /* FREERTOS_CONFIG_H */
 ```
+{% endraw %}
 
 ## 2. FreeRTOS中断配置和临界端
 
@@ -237,15 +226,16 @@ extern uint32_t SystemCoreClock;
 
 407的`core_cm4.h`的`NVIC_Type`和`SCB_Type`，NVIC和SCB都位于系统控制空间(SCS)内，SCS的地址从0XE000E000 开始:
 
+{% raw %}
 ```c
 #define SCS_BASE (0xE000E000UL) // SCS系统控制空间起始地址
 #define NVIC_BASE (SCS_BASE + 0x0100UL)
 #define SCB_BASE (SCS_BASE + 0x0D00UL) 
-
 #define SCnSCB ((SCnSCB_Type*) SCS_BASE) 
 #define SCB ((SCB_Type *) SCB_BASE) ((NVIC_Type *) NVIC_BASE ) // SCB寄存器起始地址
 #define NVIC ((NVIC_Type *) NVIC_BASE ) // NVIC寄存器起始地址
 ```
+{% endraw %}
 
 在STM32F407的软件工程的启动文件中，有中断向量表（可从其看出有多少个中断和中断类型）
 
@@ -295,6 +285,7 @@ Cortex-M处理器有三个固定优先级和 256 个（8位）可编程的优先
 
 `BASEPRI`屏蔽模式下，低于某个阈值的中断会被屏蔽。
 
+{% raw %}
 ```c
 // 1. PRIMASK和FAULTMASK
 CPSIE I; //清除 PRIMASK(使能中断)，F是FAULTMASK
@@ -312,6 +303,7 @@ MSR BASEPRI, R0
 MOV R0, #0 // 取消BASEPRI对中断的屏蔽
 MSR BASEPRI, R0
 ```
+{% endraw %}
 
 **4）FreeRTOS中断配置：**
 
@@ -328,6 +320,7 @@ MSR BASEPRI, R0
 
 任务级临界代码保护使用方法如下（优先级低于`configMAX_SYSCALL_INTERRUPT_PRIORITY`的中断被屏蔽）：
 
+{% raw %}
 ```c
 void taskcritical_test(void) {
 	while(1) {
@@ -339,9 +332,11 @@ void taskcritical_test(void) {
 	}
 }
 ```
+{% endraw %}
 
 `taskENTER_CRITICAL_FROM_ISR()`和`taskEXIT_CRITICAL_FROM_ISR()`是用在**中断服务程序**中的，而且这个中断的优先级一定要低于`configMAX_SYSCALL_INTERRUPT_PRIORITY`：
 
+{% raw %}
 ```c
 //定时器3中断服务函数，注意一定要导入stm32fxx_tim.c
 void TIM3_IRQHandler(void) {
@@ -354,12 +349,13 @@ void TIM3_IRQHandler(void) {
 	TIM_ClearITPendingBit(TIM3,TIM_IT_Update); //清除中断标志位
 }
 ```
+{% endraw %}
 
 **STM32中定时器中断的使用（注意一定要导入stm32fxx_tim.c）：**
 
+{% raw %}
 ```c
 #include "stm32f4xx.h"
-
 //通用定时器3中断初始化
 // arr：自动重装值。
 // psc：时钟预分频数
@@ -369,26 +365,20 @@ void TIM3_IRQHandler(void) {
 void TIM3_Int_Init(u16 arr, u16 psc) {
   TIM_TimeBaseInitTypeDef TIM_TimeBaseInitStructure;
   NVIC_InitTypeDef NVIC_InitStructure;
-
   RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM3, ENABLE); ///使能TIM3时钟
-
   TIM_TimeBaseInitStructure.TIM_Period = arr;    //自动重装载值
   TIM_TimeBaseInitStructure.TIM_Prescaler = psc; //定时器分频
   TIM_TimeBaseInitStructure.TIM_CounterMode = TIM_CounterMode_Up; //向上计数模式
   TIM_TimeBaseInitStructure.TIM_ClockDivision = TIM_CKD_DIV1;
-
   TIM_TimeBaseInit(TIM3, &TIM_TimeBaseInitStructure); //初始化TIM3
-
   TIM_ITConfig(TIM3, TIM_IT_Update, ENABLE); //允许定时器3更新中断
   TIM_Cmd(TIM3, ENABLE);                     //使能定时器3
-
   NVIC_InitStructure.NVIC_IRQChannel = TIM3_IRQn; //定时器3中断
   NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0x04; //抢占优先级4
   NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0x00;        //子优先级0
   NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
   NVIC_Init(&NVIC_InitStructure);
 }
-
 //定时器3中断服务函数
 void TIM3_IRQHandler(void) {
   if (TIM_GetITStatus(TIM3, TIM_IT_Update) == SET) { //溢出中断
@@ -396,10 +386,10 @@ void TIM3_IRQHandler(void) {
   }
   TIM_ClearITPendingBit(TIM3, TIM_IT_Update); //清除中断标志位
 }
-
 // 使用
 TIM3_Int_Init(10000 - 1, 8400 - 1); //初始化定时器3，定时器周期1S
 ```
+{% endraw %}
 
 ## 3. FreeRTOS任务管理
 
@@ -415,6 +405,7 @@ RTOS 调度器的职责是确保当一个任务开始执行的时候其上下文
 
 **4）任务实现：**
 
+{% raw %}
 ```c
 void vATaskFunction(void *pvParameters) {
 	for( ; ; ) {
@@ -427,16 +418,19 @@ void vATaskFunction(void *pvParameters) {
 	vTaskDelete(NULL); 
 }
 ```
+{% endraw %}
 
 **5）任务控制块：**FreeRTOS 的每个任务都有一些属性需要存储，FreeRTOS 把这些属性集合到一起用一个结 构体来表示，这个结构体叫做任务控制块：TCB_t，在使用函数 xTaskCreate()创建任务的时候就会**自动的给每个任务分配一个任务控制块**。在老版本的 FreeRTOS 中任务控制块叫做 tskTCB。
 
 **6）任务堆栈大小：**在`portmacro.h`中指定。
 
+{% raw %}
 ```c
 #define portSTACK_TYPE uint32_t // 4个字节
 #define portBASE_TYPE long
 typedef portSTACK_TYPE StackType_t;
 ```
+{% endraw %}
 
 **7）任务创建和删除API：**<img src="/assets/images/FreeRTOS-study/image-20220218000524649.png" alt="image-20220218000524649" style="zoom:67%;" />
 
@@ -444,7 +438,8 @@ typedef portSTACK_TYPE StackType_t;
 
 * `xTaskCreate()`：任务所需RAM自动从FreeRTOS的堆中分配，因此必须提供内存管理方式（`heap_*.c`)，`configSUPPORT_DYNAMIC_ALLOCATION必须为`必须为1，新创建的任务默认就是就绪态的，因此不管在任务调度器启动前还是启动后，都可以创建任务。
 
-    ```c
+{% raw %}
+```c
     BaseType_t xTaskCreate( TaskFunction_t pxTaskCode, // 任务函数
                             const char * const pcName, // 任务名字，长度不能超过configMAX_TASK_NAME_LEN
                             const uint16_t usStackDepth, // 堆栈大小
@@ -454,11 +449,13 @@ typedef portSTACK_TYPE StackType_t;
     // 返回值
     pdPASS: 任务创建成功。
     errCOULD_NOT_ALLOCATE_REQUIRED_MEMORY： 任务创建失败，因为堆内存不足。
-    ```
+```
+{% endraw %}
 
 * `xTaskCreateStatic()`：任务所需的RAM由用户提供，`configSUPPORT_STATIC_ALLOCATION`必须设为1，还需要实现函 数`vApplicationGetIdleTaskMemory()`和`vApplicationGetTimerTaskMemory()`。任务的堆栈、任务控制块就需要由用户来指定了。
 
-    ```c
+{% raw %}
+```c
     #include "FreeRTOS.h"
     #include "delay.h"
     #include "led.h"
@@ -466,34 +463,28 @@ typedef portSTACK_TYPE StackType_t;
     #include "task.h"
     #include "timer.h"
     #include "usart.h"
-    
     static StackType_t IdleTaskStack[configMINIMAL_STACK_SIZE]; //空闲任务任务堆栈
     static StaticTask_t IdleTaskTCB; //空闲任务控制块
-    
     static StackType_t TimerTaskStack[configTIMER_TASK_STACK_DEPTH]; //定时器服务任务堆栈
     static StaticTask_t TimerTaskTCB; //定时器服务任务控制块
-    
     #define START_TASK_PRIO 1 //任务优先级
     #define START_STK_SIZE 128 //任务堆栈大小
     StackType_t StartTaskStack[START_STK_SIZE]; //任务堆栈
     StaticTask_t StartTaskTCB; //任务控制块
     TaskHandle_t StartTask_Handler; //任务句柄
     void start_task(void *pvParameters); //任务函数
-    
     #define TASK1_TASK_PRIO 2 //任务优先级
     #define TASK1_STK_SIZE 128 //任务堆栈大小
     StaskType_t Task1TaskStack[TASK1_STK_SIZE]; //任务堆栈
     StaticTask_t Task1TaskTCB; //任务控制块
     TaskHandle_t Task1Task_Handler; //任务句柄
     void task1_task(void *pvParameters); //任务函数
-    
     #define TASK2_TASK_PRIO 3 //任务优先级
     #define TASK2_STK_SIZE 128 //任务堆栈大小
     StackType_t Task2TaskStack[TASK2_STK_SIZE]; //任务堆栈
     StaticTask_t Task2TaskTCB; //任务控制块
     TaskHandle_t Task2Task_Handler; //任务句柄
     void task2_task(void *pvParameters); //任务函数
-    
     //获取空闲任务地任务堆栈和任务控制块内存，因为本例程使用的
     //静态内存，因此空闲任务的任务堆栈和任务控制块的内存就应该
     //有用户来提供，FreeRTOS提供了接口函数vApplicationGetIdleTaskMemory()
@@ -508,7 +499,6 @@ typedef portSTACK_TYPE StackType_t;
       *ppxIdleTaskStackBuffer = IdleTaskStack;
       *pulIdleTaskStackSize = configMINIMAL_STACK_SIZE;
     }
-    
     //获取定时器服务任务的任务堆栈和任务控制块内存
     // ppxTimerTaskTCBBuffer:任务控制块内存
     // ppxTimerTaskStackBuffer:任务堆栈内存
@@ -520,13 +510,11 @@ typedef portSTACK_TYPE StackType_t;
       *ppxTimerTaskStackBuffer = TimerTaskStack;
       *pulTimerTaskStackSize = configTIMER_TASK_STACK_DEPTH;
     }
-    
     int main(void) {
       NVIC_PriorityGroupConfig(NVIC_PriorityGroup_4); //设置系统中断优先级分组4
       delay_init(168);                                //初始化延时函数
       uart_init(115200);                              //初始化串口
       LED_Init();                                     //初始化LED端口
-    
       //创建开始任务
       StartTask_Handler =
           xTaskCreateStatic((TaskFunction_t)start_task, //任务函数
@@ -538,7 +526,6 @@ typedef portSTACK_TYPE StackType_t;
                             (StaticTask_t *)&StartTaskTCB); //任务控制块
       vTaskStartScheduler();                                //开启任务调度
     }
-    
     //开始任务任务函数
     void start_task(void *pvParameters) {
       taskENTER_CRITICAL(); //进入临界区
@@ -555,11 +542,9 @@ typedef portSTACK_TYPE StackType_t;
       vTaskDelete(StartTask_Handler); //删除开始任务
       taskEXIT_CRITICAL();            //退出临界区
     }
-    
     // task1任务函数
     void task1_task(void *pvParameters) {
       u8 task1_num = 0;
-    
       while (1) {
         task1_num++; //任务执1行次数加1 注意task1_num1加到255的时候会清零！！
         LED0 = !LED0;
@@ -575,11 +560,9 @@ typedef portSTACK_TYPE StackType_t;
         vTaskDelay(1000); //延时1s，也就是1000个时钟节拍
       }
     }
-    
     // task2任务函数
     void task2_task(void *pvParameters) {
       u8 task2_num = 0;
-    
       while (1) {
         task2_num++; //任务2执行次数加1 注意task1_num2加到255的时候会清零！！
         LED1 = !LED1;
@@ -587,25 +570,30 @@ typedef portSTACK_TYPE StackType_t;
         vTaskDelay(1000); //延时1s，也就是1000个时钟节拍
       }
     }
-    ```
+```
+{% endraw %}
 
-    ```c
+{% raw %}
+```c
     // 返回值：
     NULL：任务创建失败，puxStackBuffer 或 pxTaskBuffer 为 NULL 的时候会导致这个 错误的发生。
     其他值: 任务创建成功，返回任务的任务句柄。
-    ```
+```
+{% endraw %}
 
 * `xTaskCreateRestricted(const TaskParameters_t * const pxTaskDefinition, TaskHandle_t *
     pxCreatedTask)`：此函数要求所使用的 MCU 有 MPU(内存保护单元)， 用此函数创建的任务会受到MPU的保护，其他的功能和函数 xTaxkCreate()一样。
 
-    ```c
+{% raw %}
+```c
     // 参数
     pxTaskDefinition: 指向一个结构体 TaskParameters_t，这个结构体描述了任务的任务函数、 堆栈大小、优先级等。此结构体在文件 task.h 中有定义。 
     pxCreatedTask：任务句柄。
     // 返回值
     pdPASS:任务创建成功。
     其他值: 任务未创建成功，很有可能是因为 FreeRTOS 的堆太小了。
-    ```
+```
+{% endraw %}
 
 * `vTaskDelete(TaskHandle_t xTaskToDelete)`：参数是任务句柄，没有返回值。如果任务是使用动态方法创建的，也就是使用函数xTaskCreate()创建的，那么在此任务被删除以后此任务之前申请的堆栈和控制块内存会在空闲任务中被释放掉，因此当调用函数 vTaskDelete()删除任务以后必须给空闲任务一定的运行时间。**空间任务用来释放内核所分配的内存空间。**但用户在任务中`pvPortMalloc()`自己手动分配了内存，必须自己`vPortFree()`手动释放掉，不然会导致内存泄露。
 

@@ -4,8 +4,9 @@ category: [微信小程序]
 tag: [微信小程序, 学习笔记]
 title: 微信小程序学习笔记5
 ---
-{% raw %}
+
 ## 七、让小程序往下兼容
+{% raw %}
 ```javascript
 wx.getSystemInfoSync() 或者 wx.getSystemInfo()
 /*
@@ -26,7 +27,6 @@ wx.getSystemInfoSync() 或者 wx.getSystemInfo()
   }
  */
  screenHeight - 导航栏高度 == windowHeight
- 
  // 通过判断API是否存在做兼容
 if (wx.openBluetoothAdapter) {
   wx.openBluetoothAdapter()
@@ -50,8 +50,10 @@ wx.canIUse('contact-button')
 wx.canIUse('text.selectable')
 wx.canIUse('button.open-type.contact')
 ```
+{% endraw %}
 **小程序管理后台 设置 “基础库最低版本设置” ==> 不向前兼容。**
 ## 八、小程序开发
+{% raw %}
 ```mermaid
 graph TD
 A[交互图或者手稿描绘小程序的界面交互和界面之间的跳转关系] --> B(WXML+WXSS还原设计稿)
@@ -59,12 +61,14 @@ B --> C(梳理出每个页面的data部分)
 C --> D(填充WXML的模板语法)
 D --> E(JS逻辑部分)
 ```
+{% endraw %}
 #### 1. Flex布局
 采用flex布局的元素，简称为“容器”（类名：container），容器内的元素简称为“项目”（类名：item）。
 ![209cd358428e50d052bd68e5451b565f.png](/assets\images\wechat-applet-study-note\Image29.png)
 ![236c5ad3c238eef7cf0a42630c045737.png](/assets\images\wechat-applet-study-note\Image30.png)
 [项目是在主轴上排列，排满后在交叉轴方向换行。需要注意的是，交叉轴垂直于主轴，它的方向取决于主轴方向。](https://developers.weixin.qq.com/ebook?action=get_post_info&docid=00080e799303986b0086e605f5680a)
 #### 2. 反馈
+{% raw %}
 ```html
 // 1. 触摸反馈 ==> 让用户感觉到“按下”了
 /*page.wxss */
@@ -118,7 +122,9 @@ Page({
   }
 })
 ```
+{% endraw %}
 #### 3. 通信
+{% raw %}
 ```javascript
 wx.request({
   url: 'https://test.com/getinfo',
@@ -127,12 +133,14 @@ wx.request({
   }
 })
 ```
+{% endraw %}
 ![a971dd8d3f97165cc39fae23eb9c8a7b.png](/assets\images\wechat-applet-study-note\Image31.png)
 **注意：**
 * url只能是https，域名，该域名要在小程序管理平台配置。
 * 开发阶段（开发者工具、小程序的开发版和小程序的体验版）允许wx.request请求任意域名。
 * 不能使用ip地址或者localhost，不能带端口号，域名需要ICP备案。
 1. get方式请求
+{% raw %}
 ```javascript
 wx.request({
   url: 'https://test.com/getinfo',
@@ -142,8 +150,10 @@ wx.request({
   }
 })
 ```
+{% endraw %}
 2. post方式请求
 data里面是一个对象a，只是conten-type的application/json值将这个对象转化成了json，所以最终请求过去的数据是json数据：` {"a":{"b":[1,2,3],"c":{"d":"test"}}}`。
+{% raw %}
 ```javascript
 wx.request({
   url: 'https://test.com/postdata',
@@ -160,12 +170,14 @@ wx.request({
   }
 })
 ```
+{% endraw %}
 ![6f139776949dbd031f20f8577ee39f3f.png](/assets\images\wechat-applet-study-note\Image32.png)
 **注意：**
 * 要先判断statusCode。
 * data字段类型根据响应的header['content-type']决定，默认`header['content-type'] = application/json`。
 * 在触发success回调前，小程序宿主环境会对data字段的值做JSON解析，如果解析成功，那么data字段的值会被设置成解析后的Object对象，如果不成功，那就认为data是String类型，值为HTTP响应过来的内容。
 3. 超时时间
+{% raw %}
 ```javascript
 // app.json
 {
@@ -174,8 +186,10 @@ wx.request({
   }
 }
 ```
+{% endraw %}
 4. 请求的状态反馈
 点击一个按钮，界面出现“加载中...”的Loading界面，然后发送一个请求到后台，后台返回成功直接进入下一个业务逻辑处理，后台返回失败或者网络异常等情况则显示一个“系统错误”的Toast，同时一开始的Loading界面会消失。
+{% raw %}
 ```javascript
 var hasClick = false;
 Page({
@@ -206,8 +220,10 @@ Page({
   }
 })
 ```
+{% endraw %}
 #### 4. 微信登录
 将第三服务器的用户id与微信用户id绑定，这样下次用户登录时就可以不用再次输入账号密码，仅凭该用户的微信用户id就可以登录。
+{% raw %}
 ```javascript
 // page.js
 Page({
@@ -236,6 +252,7 @@ Page({
   }
 })
 ```
+{% endraw %}
 ![9b6b929ee6987abc3473518644f0e2b2.png](/assets\images\wechat-applet-study-note\Image33.png)
 第3步，微信服务器暴露给第三方服务器的接口：`https://api.weixin.qq.com/sns/jscode2session?appid=<AppId>&secret=<AppSecret>&js_code=<code>&grant_type=authorization_code`。
 session_key则是微信服务器给开发者服务器颁发的身份凭证，开发者可以用session_key请求微信服务器其他接口来获取一些其他信息，session_key不应该泄露或者下发到小程序前端。
@@ -244,6 +261,7 @@ session_key则是微信服务器给开发者服务器颁发的身份凭证，开
 扫码、操控蓝牙、获取设备网络状态、调整屏幕亮度等能力。
 1. 扫码
 wx.scanCode的success回调会收到这个二维码所对应的字符串信息。
+{% raw %}
 ```javascript
 //page.js
 Page({
@@ -258,7 +276,9 @@ Page({
   }
 })
 ```
+{% endraw %}
 2. 获取网络状态
+{% raw %}
 ```javascript
 //page.js
 Page({
@@ -286,6 +306,7 @@ url:'http://test.com/somefile.pdf',
     })
   }
 })
-``` 
+```
+{% endraw %}
 `wx.onNetworkStatusChange`: 动态监听网络状态变化的接口，让开发者可以及时根据网络状况去调整小程序的体验。
-{% endraw %}  
+

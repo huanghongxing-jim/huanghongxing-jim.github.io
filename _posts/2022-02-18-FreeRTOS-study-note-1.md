@@ -63,18 +63,15 @@ title: FreeRTOS学习笔记1
 
 6. 清空`stm32f4xx_it.c`文件和编辑`main.c`文件：
 
-    ```c
+{% raw %}
+```c
     // main.c
-    
     #include "stm32f4xx.h"
-    
     void Delay(__IO uint32_t nCount) {
       while (nCount--) {
       }
     }
-    
     int main(void) {
-    
       GPIO_InitTypeDef GPIO_InitStructure;
       RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOF, ENABLE);
       GPIO_InitStructure.GPIO_Pin = GPIO_Pin_9 | GPIO_Pin_10;
@@ -83,7 +80,6 @@ title: FreeRTOS学习笔记1
       GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
       GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
       GPIO_Init(GPIOF, &GPIO_InitStructure);
-    
       while (1) {
         GPIO_SetBits(GPIOF, GPIO_Pin_9 | GPIO_Pin_10);
         Delay(0x7FFFFF);
@@ -91,7 +87,8 @@ title: FreeRTOS学习笔记1
         Delay(0x7FFFFF);
       }
     }
-    ```
+```
+{% endraw %}
 <img src="/assets/images/FreeRTOS-study/image-20220216224022065.png" alt="image-20220216224022065" style="zoom:67%;" />
 
 7. 编译：<img src="/assets/images/FreeRTOS-study/image-20220216191741658.png" alt="image-20220216191741658" style="zoom: 67%;" />
@@ -107,7 +104,8 @@ title: FreeRTOS学习笔记1
 
     使用示例（main.c）：
 
-    ```c
+{% raw %}
+```c
     #include "delay.h"
     #include "stm32f4xx.h"
     #include "usart.h"
@@ -121,7 +119,8 @@ title: FreeRTOS学习笔记1
         t++;
       }
     }
-    ```
+```
+{% endraw %}
 
     ![image-20220216232834325](/assets/images/FreeRTOS-study/image-20220216232834325.png)
 
@@ -129,7 +128,8 @@ title: FreeRTOS学习笔记1
 
     **delay.c:**
 
-    ```c
+{% raw %}
+```c
     #include "delay.h"
     #include "sys.h"
     ////////////////////////////////////////////////////////////////////////////////// 	 
@@ -163,10 +163,8 @@ title: FreeRTOS学习笔记1
     //delay_tickspersec改为：delay_ostickspersec
     //delay_intnesting改为：delay_osintnesting
     ////////////////////////////////////////////////////////////////////////////////// 
-    
     static u8  fac_us=0;							//us延时倍乘数			   
     static u16 fac_ms=0;							//ms延时倍乘数,在os下,代表每个节拍的ms数
-    	
     #if SYSTEM_SUPPORT_OS							//如果SYSTEM_SUPPORT_OS定义了,说明要支持OS了(不限于UCOS).
     //当delay_us/delay_ms需要支持OS的时候需要三个与OS相关的宏定义和函数来支持
     //首先是3个宏定义:
@@ -177,7 +175,6 @@ title: FreeRTOS学习笔记1
     //  delay_osschedlock:用于锁定OS任务调度,禁止调度
     //delay_osschedunlock:用于解锁OS任务调度,重新开启调度
     //    delay_ostimedly:用于OS延时,可以引起任务调度.
-    
     //本例程仅作UCOSII和UCOSIII的支持,其他OS,请自行参考着移植
     //支持UCOSII
     #ifdef 	OS_CRITICAL_METHOD						//OS_CRITICAL_METHOD定义了,说明要支持UCOSII				
@@ -185,15 +182,12 @@ title: FreeRTOS学习笔记1
     #define delay_ostickspersec	OS_TICKS_PER_SEC	//OS时钟节拍,即每秒调度次数
     #define delay_osintnesting 	OSIntNesting		//中断嵌套级别,即中断嵌套次数
     #endif
-    
     //支持UCOSIII
     #ifdef 	CPU_CFG_CRITICAL_METHOD					//CPU_CFG_CRITICAL_METHOD定义了,说明要支持UCOSIII	
     #define delay_osrunning		OSRunning			//OS是否运行标记,0,不运行;1,在运行
     #define delay_ostickspersec	OSCfg_TickRate_Hz	//OS时钟节拍,即每秒调度次数
     #define delay_osintnesting 	OSIntNestingCtr		//中断嵌套级别,即中断嵌套次数
     #endif
-    
-    
     //us级延时时,关闭任务调度(防止打断us级延迟)
     void delay_osschedlock(void)
     {
@@ -204,7 +198,6 @@ title: FreeRTOS学习笔记1
     	OSSchedLock();							//UCOSII的方式,禁止调度，防止打断us延时
     #endif
     }
-    
     //us级延时时,恢复任务调度
     void delay_osschedunlock(void)
     {	
@@ -215,7 +208,6 @@ title: FreeRTOS学习笔记1
     	OSSchedUnlock();						//UCOSII的方式,恢复调度
     #endif
     }
-    
     //调用OS自带的延时函数延时
     //ticks:延时的节拍数
     void delay_ostimedly(u32 ticks)
@@ -227,7 +219,6 @@ title: FreeRTOS学习笔记1
     	OSTimeDly(ticks);						//UCOSII延时
     #endif 
     }
-     
     //systick中断服务函数,使用OS时用到
     void SysTick_Handler(void)
     {	
@@ -239,7 +230,6 @@ title: FreeRTOS学习笔记1
     	}
     }
     #endif
-    			   
     //初始化延迟函数
     //当使用OS的时候,此函数会初始化OS的时钟节拍
     //SYSTICK的时钟固定为AHB时钟的1/8
@@ -263,7 +253,6 @@ title: FreeRTOS学习笔记1
     	fac_ms=(u16)fac_us*1000;				//非OS下,代表每个ms需要的systick时钟数   
     #endif
     }								    
-    
     #if SYSTEM_SUPPORT_OS 						//如果需要支持OS.
     //延时nus
     //nus:要延时的us数.	
@@ -355,11 +344,13 @@ title: FreeRTOS学习笔记1
     	if(remain)delay_xms(remain);
     } 
     #endif
-    ```
+```
+{% endraw %}
 
     **delay.h:**
 
-    ```c
+{% raw %}
+```c
     #ifndef __DELAY_H
     #define __DELAY_H 			   
     #include <sys.h>	  
@@ -382,13 +373,14 @@ title: FreeRTOS学习笔记1
     void delay_init(u8 SYSCLK);
     void delay_ms(u16 nms);
     void delay_us(u32 nus);
-    
     #endif
-    ```
+```
+{% endraw %}
 
     **sys.c:**
 
-    ```c
+{% raw %}
+```c
     #include "sys.h"  
     //////////////////////////////////////////////////////////////////////////////////	 
     //本程序只供学习使用，未经作者许可，不得用于其它任何用途
@@ -406,8 +398,6 @@ title: FreeRTOS学习笔记1
     //修改说明
     //无
     //////////////////////////////////////////////////////////////////////////////////  
-    
-    
     //THUMB指令不支持汇编内联
     //采用如下方法实现执行汇编指令WFI  
     __asm void WFI_SET(void)
@@ -433,11 +423,13 @@ title: FreeRTOS学习笔记1
     	MSR MSP, r0 			//set Main Stack value
     	BX r14
     }
-    ```
+```
+{% endraw %}
 
     **sys.h:**
 
-    ```c
+{% raw %}
+```c
     #ifndef __SYS_H
     #define __SYS_H	 
     #include "stm32f4xx.h" 
@@ -456,13 +448,9 @@ title: FreeRTOS学习笔记1
     //修改说明
     //无
     ////////////////////////////////////////////////////////////////////////////////// 
-    
-    
     //0,不支持ucos
     //1,支持ucos
     #define SYSTEM_SUPPORT_OS		0		//定义系统文件夹是否支持UCOS
-    																	    
-    	 
     //位带操作,实现51类似的GPIO控制功能
     //具体实现思想,参考<<CM3权威指南>>第五章(87页~92页).M4同M3类似,只是寄存器地址变了.
     //IO口操作宏定义
@@ -479,7 +467,6 @@ title: FreeRTOS学习笔记1
     #define GPIOG_ODR_Addr    (GPIOG_BASE+20) //0x40021814   
     #define GPIOH_ODR_Addr    (GPIOH_BASE+20) //0x40021C14    
     #define GPIOI_ODR_Addr    (GPIOI_BASE+20) //0x40022014     
-    
     #define GPIOA_IDR_Addr    (GPIOA_BASE+16) //0x40020010 
     #define GPIOB_IDR_Addr    (GPIOB_BASE+16) //0x40020410 
     #define GPIOC_IDR_Addr    (GPIOC_BASE+16) //0x40020810 
@@ -489,47 +476,39 @@ title: FreeRTOS学习笔记1
     #define GPIOG_IDR_Addr    (GPIOG_BASE+16) //0x40021810 
     #define GPIOH_IDR_Addr    (GPIOH_BASE+16) //0x40021C10 
     #define GPIOI_IDR_Addr    (GPIOI_BASE+16) //0x40022010 
-     
     //IO口操作,只对单一的IO口!
     //确保n的值小于16!
     #define PAout(n)   BIT_ADDR(GPIOA_ODR_Addr,n)  //输出 
     #define PAin(n)    BIT_ADDR(GPIOA_IDR_Addr,n)  //输入 
-    
     #define PBout(n)   BIT_ADDR(GPIOB_ODR_Addr,n)  //输出 
     #define PBin(n)    BIT_ADDR(GPIOB_IDR_Addr,n)  //输入 
-    
     #define PCout(n)   BIT_ADDR(GPIOC_ODR_Addr,n)  //输出 
     #define PCin(n)    BIT_ADDR(GPIOC_IDR_Addr,n)  //输入 
-    
     #define PDout(n)   BIT_ADDR(GPIOD_ODR_Addr,n)  //输出 
     #define PDin(n)    BIT_ADDR(GPIOD_IDR_Addr,n)  //输入 
-    
     #define PEout(n)   BIT_ADDR(GPIOE_ODR_Addr,n)  //输出 
     #define PEin(n)    BIT_ADDR(GPIOE_IDR_Addr,n)  //输入
-    
     #define PFout(n)   BIT_ADDR(GPIOF_ODR_Addr,n)  //输出 
     #define PFin(n)    BIT_ADDR(GPIOF_IDR_Addr,n)  //输入
-    
     #define PGout(n)   BIT_ADDR(GPIOG_ODR_Addr,n)  //输出 
     #define PGin(n)    BIT_ADDR(GPIOG_IDR_Addr,n)  //输入
-    
     #define PHout(n)   BIT_ADDR(GPIOH_ODR_Addr,n)  //输出 
     #define PHin(n)    BIT_ADDR(GPIOH_IDR_Addr,n)  //输入
-    
     #define PIout(n)   BIT_ADDR(GPIOI_ODR_Addr,n)  //输出 
     #define PIin(n)    BIT_ADDR(GPIOI_IDR_Addr,n)  //输入
-    
     //以下为汇编函数
     void WFI_SET(void);		//执行WFI指令
     void INTX_DISABLE(void);//关闭所有中断
     void INTX_ENABLE(void);	//开启所有中断
     void MSR_MSP(u32 addr);	//设置堆栈地址 
     #endif
-    ```
+```
+{% endraw %}
 
     **usart.c:**
 
-    ```c
+{% raw %}
+```c
     #include "sys.h"
     #include "usart.h"	
     ////////////////////////////////////////////////////////////////////////////////// 	 
@@ -562,8 +541,6 @@ title: FreeRTOS学习笔记1
     //V1.5修改说明
     //1,增加了对UCOSII的支持
     ////////////////////////////////////////////////////////////////////////////////// 	  
-     
-    
     //////////////////////////////////////////////////////////////////
     //加入以下代码,支持printf函数,而不需要选择use MicroLIB	  
     #if 1
@@ -573,7 +550,6 @@ title: FreeRTOS学习笔记1
     { 
     	int handle; 
     }; 
-    
     FILE __stdout;       
     //定义_sys_exit()以避免使用半主机模式    
     void _sys_exit(int x) 
@@ -588,7 +564,6 @@ title: FreeRTOS学习笔记1
     	return ch;
     }
     #endif
-     
     #if EN_USART1_RX   //如果使能了接收
     //串口1中断服务程序
     //注意,读取USARTx->SR能避免莫名其妙的错误   	
@@ -598,7 +573,6 @@ title: FreeRTOS学习笔记1
     //bit14，	接收到0x0d
     //bit13~0，	接收到的有效字节数目
     u16 USART_RX_STA=0;       //接收状态标记	
-    
     //初始化IO 串口1 
     //bound:波特率
     void uart_init(u32 bound){
@@ -606,14 +580,11 @@ title: FreeRTOS学习笔记1
       GPIO_InitTypeDef GPIO_InitStructure;
     	USART_InitTypeDef USART_InitStructure;
     	NVIC_InitTypeDef NVIC_InitStructure;
-    	
     	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA,ENABLE); //使能GPIOA时钟
     	RCC_APB2PeriphClockCmd(RCC_APB2Periph_USART1,ENABLE);//使能USART1时钟
-     
     	//串口1对应引脚复用映射
     	GPIO_PinAFConfig(GPIOA,GPIO_PinSource9,GPIO_AF_USART1); //GPIOA9复用为USART1
     	GPIO_PinAFConfig(GPIOA,GPIO_PinSource10,GPIO_AF_USART1); //GPIOA10复用为USART1
-    	
     	//USART1端口配置
       GPIO_InitStructure.GPIO_Pin = GPIO_Pin_9 | GPIO_Pin_10; //GPIOA9与GPIOA10
     	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;//复用功能
@@ -621,7 +592,6 @@ title: FreeRTOS学习笔记1
     	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP; //推挽复用输出
     	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP; //上拉
     	GPIO_Init(GPIOA,&GPIO_InitStructure); //初始化PA9，PA10
-    
        //USART1 初始化设置
     	USART_InitStructure.USART_BaudRate = bound;//波特率设置
     	USART_InitStructure.USART_WordLength = USART_WordLength_8b;//字长为8位数据格式
@@ -630,26 +600,18 @@ title: FreeRTOS学习笔记1
     	USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;//无硬件数据流控制
     	USART_InitStructure.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;	//收发模式
       USART_Init(USART1, &USART_InitStructure); //初始化串口1
-    	
       USART_Cmd(USART1, ENABLE);  //使能串口1 
-    	
     	//USART_ClearFlag(USART1, USART_FLAG_TC);
-    	
     #if EN_USART1_RX	
     	USART_ITConfig(USART1, USART_IT_RXNE, ENABLE);//开启相关中断
-    
     	//Usart1 NVIC 配置
       NVIC_InitStructure.NVIC_IRQChannel = USART1_IRQn;//串口1中断通道
     	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority=3;//抢占优先级3
     	NVIC_InitStructure.NVIC_IRQChannelSubPriority =3;		//子优先级3
     	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;			//IRQ通道使能
     	NVIC_Init(&NVIC_InitStructure);	//根据指定的参数初始化VIC寄存器、
-    
     #endif
-    	
     }
-    
-    
     void USART1_IRQHandler(void)                	//串口1中断服务程序
     {
     	u8 Res;
@@ -659,7 +621,6 @@ title: FreeRTOS学习笔记1
     	if(USART_GetITStatus(USART1, USART_IT_RXNE) != RESET)  //接收中断(接收到的数据必须是0x0d 0x0a结尾)
     	{
     		Res =USART_ReceiveData(USART1);//(USART1->DR);	//读取接收到的数据
-    		
     		if((USART_RX_STA&0x8000)==0)//接收未完成
     		{
     			if(USART_RX_STA&0x4000)//接收到了0x0d
@@ -684,11 +645,13 @@ title: FreeRTOS学习笔记1
     #endif
     } 
     #endif	
-    ```
+```
+{% endraw %}
 
     **usart.h:**
 
-    ```c
+{% raw %}
+```c
     #ifndef __USART_H
     #define __USART_H
     #include "stdio.h"	
@@ -719,10 +682,10 @@ title: FreeRTOS学习笔记1
     ////////////////////////////////////////////////////////////////////////////////// 	
     #define USART_REC_LEN  			200  	//定义最大接收字节数 200
     #define EN_USART1_RX 			1		//使能（1）/禁止（0）串口1接收
-    	  	
     extern u8  USART_RX_BUF[USART_REC_LEN]; //接收缓冲,最大USART_REC_LEN个字节.末字节为换行符 
     extern u16 USART_RX_STA;         		//接收状态标记	
     //如果想串口中断接收，请不要注释以下宏定义
     void uart_init(u32 bound);
     #endif
-    ```
+```
+{% endraw %}

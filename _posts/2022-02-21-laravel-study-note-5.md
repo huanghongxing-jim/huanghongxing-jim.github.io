@@ -4,7 +4,7 @@ category: [Larave学习笔记]
 tag: [Larave, 学习笔记] 
 title: Larave学习笔记5
 ---
-{% raw %}  
+
 
 # 三、Laravel简单操作技巧
 
@@ -32,26 +32,28 @@ title: Larave学习笔记5
 
 ### 5.使用Composer
 
+{% raw %}
 ```shell
 # 创建配置文件以及初始化
 composer init
-
 # 搜索某个库
 composer search monolog
-
 # 查看库的信息
 composer show --all monolog/monolog
 ```
+{% endraw %}
 
 添加库：
 
 在配置文件`composer.json`中添加依赖和版本：
 
+{% raw %}
 ```shell
 "require": {
     "monolog/monolog": "2.21.*"
 }
 ```
+{% endraw %}
 
 	然后用`composer install`下载依赖，之后打开`vendor`目录，库将会下载在里面。
 
@@ -78,21 +80,25 @@ composer show --all monolog/monolog
 
 	命令：
 
+{% raw %}
 ```shell
 php artisan make:auth
 ```
+{% endraw %}
 
 	生成的路由内容：
 
+{% raw %}
 ```php
 <?php
 Auth::routes();
-
 Route::get('/home', 'HomeController@index')->name('home');
 ```
+{% endraw %}
 
 `Auth::routes()`位置：`\vendor\laravel\framework\src\Illuminate\Routing\Router.php`的`auth`函数：
 
+{% raw %}
 ```php
     /**
      * Register the typical authentication routes for an application.
@@ -105,11 +111,9 @@ public function auth()
     $this->get('login', 'Auth\LoginController@showLoginForm')->name('login');
     $this->post('login', 'Auth\LoginController@login');
     $this->post('logout', 'Auth\LoginController@logout')->name('logout');
-
     // Registration Routes...
     $this->get('register', 'Auth\RegisterController@showRegistrationForm')->name('register');
     $this->post('register', 'Auth\RegisterController@register');
-
     // Password Reset Routes...
     $this->get('password/reset', 'Auth\ForgotPasswordController@showLinkRequestForm')->name('password.request');
     $this->post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
@@ -117,6 +121,7 @@ public function auth()
     $this->post('password/reset', 'Auth\ResetPasswordController@reset');
 }
 ```
+{% endraw %}
 
 #### 2.数据迁移 --> 在数据库生成对应的表
 
@@ -124,6 +129,7 @@ public function auth()
 
 `Mysql`语句：
 
+{% raw %}
 ```mysql
 CREATE TABLE IF NOT EXISTS students(
 	'id' INT AUTO_INCREMENT PRIMARY KEY,
@@ -135,16 +141,16 @@ CREATE TABLE IF NOT EXISTS students(
 )ENGINE=InnoDB DEFAULT CHARSET=UTF8
 AUTO_INCREMENT=1001 COMMENT='学生表';
 ```
+{% endraw %}
 
 	完善迁移文件 --> **在`up`函数中添加数据表里的字段**：
 
+{% raw %}
 ```php
 <?php
-
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
-
 class CreateStudentsTable extends Migration
 {
     /**
@@ -164,7 +170,6 @@ class CreateStudentsTable extends Migration
             $table->timestamps();
         });
     }
-
     /**
      * Reverse the migrations.
      *
@@ -176,12 +181,15 @@ class CreateStudentsTable extends Migration
     }
 }
 ```
+{% endraw %}
 
 	将`database/migrations`下的迁移文件做迁移：
 
+{% raw %}
 ```shell
 php artisan migrate
 ```
+{% endraw %}
 
 **迁移步骤：**
 
@@ -205,13 +213,12 @@ php artisan migrate
 
    - 单个填充文件：
 
-     ```php
+{% raw %}
+```php
      // \database\seeds\StudentTableSeeder.php
      <?php
-     
      use Illuminate\Database\Seeder;
      use Illuminate\Support\Facades\DB;
-     
      class StudentTableSeeder extends Seeder
      {
          /**
@@ -228,18 +235,18 @@ php artisan migrate
              ]);
          }
      }
-     ```
+```
+{% endraw %}
 
      执行：`php artisan db:seed --class=StudentTableSeeder`
 
    - 批量填充文件：
 
-     ```php
+{% raw %}
+```php
      // \database\seeds\DatabaseSeeder.php
      <?php
-     
      use Illuminate\Database\Seeder;
-     
      class DatabaseSeeder extends Seeder
      {
          /**
@@ -254,7 +261,8 @@ php artisan migrate
              $this->call(CommentTableSeeder::class);
          }
      }
-     ```
+```
+{% endraw %}
 
      执行：`php artisan db:seed`
 
@@ -268,15 +276,14 @@ php artisan migrate
 
 配置文件：
 
+{% raw %}
 ```php
 // config/filesystems.php
 <?php
 return [
 	// 支持"local", "ftp", "s3", "rackspace"，默认使用本地端空间
     'default' => env('FILESYSTEM_DRIVER', 'local'), 
-
     'cloud' => env('FILESYSTEM_CLOUD', 's3'),
-    
 	// 磁盘
     'disks' => [
         'local' => [ // 本地端空间磁盘,名字叫local
@@ -299,19 +306,19 @@ return [
     ],
 ];
 ```
+{% endraw %}
 
 使用本地端空间来让laravel有文件上传的功能：
 
 1. 在`config/filesystems.php`创建一个本地端空间磁盘，名字叫：uploads：
 
-   ```php
+{% raw %}
+```php
    // config/filesystems.php
    <?php
    return [
        'default' => env('FILESYSTEM_DRIVER', 'local'), 
-   
        'cloud' => env('FILESYSTEM_CLOUD', 's3'),
-       
    	// 磁盘
        'disks' => [
            'local' => [ 
@@ -337,7 +344,8 @@ return [
            ],
        ],
    ];
-   ```
+```
+{% endraw %}
 
    位置：
 
@@ -345,51 +353,50 @@ return [
 
 2. 控制器和路由：
 
-   ```php
+{% raw %}
+```php
    // StudentController.php
    <?php
-   
    namespace App\Http\Controllers;
-   
    use App\Student;
    use Illuminate\Http\Request;
    use Illuminate\Support\Facades\Session;
    use Illuminate\Support\Facades\Storage;
-   
    class StudentController extends Controller
    {
       public function upload(Request $request) {
           if ($request->isMethod('POST')) {
               // 获取上传来的文件
               $file = $request->file('source'); 
-              
               if ($file->isValid()) {
                   // 判断文件是否上传成功
                   $originaName = $file->getClientOriginalName(); // 原文件名
                   $ext = $file->getClientOriginalExtension(); // 扩展名，后缀
                   $type = $file->getClientMimeType(); // 文件类型
                   $realPath = $file->getRealPath(); // 临时绝对路径，还没手动保存之前文件存放的位置
-   
                   // 这种做法保证文件名称都不相同
                   $filename = date('Y-m-d-H-i-s').'-'.uniqid().'.'.$ext;
                   // 保存文件在config/filesystems.php中设置的disk里，返回一个bool，保存得成功不成功
                   $bool = Storage::disk('uploads')->put($filename, file_get_contents($realPath));
               }
           }
-   
           return view("student.upload");
       }
    }
-   ```
+```
+{% endraw %}
 
-   ```php
+{% raw %}
+```php
    // web.php
    Route::get('/home', 'HomeController@index')->name('home');
-   ```
+```
+{% endraw %}
 
 3. 视图里要提交文件的表单：
 
-   ```php
+{% raw %}
+```php
    // resources/views/student/upload.blade.php
    <div class="panel-body">
    	{{--enctype="multipart/form-data"必须加这个属性，表单才可以使用文件上传功能--}}
@@ -410,10 +417,11 @@ return [
              </div>
         </form>
    </div>
-   ```
+```
+{% endraw %}
 
 4. 可以通过更改`config/filesystems.php`里的`uploads`磁盘的空间为`public`目录底下的`uploads`目录。
 
 ![1534342816613](/assets/images/laravel-develop-study/1534342816613.png)
 
-{% endraw %}  
+

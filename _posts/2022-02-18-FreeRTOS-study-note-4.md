@@ -12,13 +12,16 @@ title: FreeRTOS学习笔记4
 
 * `BaseType_t xTaskResumeFromISR( TaskHandle_t xTaskToResume)`：在中断服务函数中恢复一个任务。
 
-    ```c
+{% raw %}
+```c
     // 返回值
     pdTRUE:恢复运行的任务的任务优先级等于或者高于正在运行的任务(被中断打断的任务)，这意味着在退出中断服务函数以后必须进行一次上下文切换。
     pdFALSE:恢复运行的任务的任务优先级低于当前正在运行的任务(被中断打断的任务)，这意味着在退出中断服务函数的以后不需要进行上下文切换。
-    ```
+```
+{% endraw %}
 
-    ```c
+{% raw %}
+```c
     // 外部中断4服务程序 
     void EXTI4_IRQHandler(void) {
     	BaseType_t YieldRequired; 
@@ -33,7 +36,8 @@ title: FreeRTOS学习笔记4
     	}
         EXTI_ClearITPendingBit(EXTI_Line4);//清除 LINE4 上的中断标志位
     }
-    ```
+```
+{% endraw %}
 
 ## 4. FreeRTOS列表和列表项
 
@@ -47,6 +51,7 @@ title: FreeRTOS学习笔记4
 
 **2）相关API（`list.c`和`list.h`）：**
 
+{% raw %}
 ```c
 void vListInitialise( List_t * const pxList ); // 列表初始化
 void vListInitialiseItem( ListItem_t * const pxItem ); // 列表项初始化
@@ -55,17 +60,17 @@ void vListInsertEnd( List_t * const pxList, ListItem_t * const pxNewListItem ); 
 UBaseType_t uxListRemove( ListItem_t * const pxItemToRemove ); // 返回新列表的当前列表项数目
 listGET_OWNER_OF_NEXT_ENTRY( pxTCB, pxList ); // 列表遍历，还函数是个宏，用于从多个同优先级的就绪任务中查找下一个要运行的任务。pxTCB用来保存pxIndex所指向的列表项的pvOwner变量值，也就是这个列表项属于谁的？通常是一个任务的任务控制块。pxList表示要遍历的列表
 ```
+{% endraw %}
 
 **3）例子：**
 
+{% raw %}
 ```c
 #include "FreeRTOS.h"
-
 List_t TestList;	  //测试用列表
 ListItem_t ListItem1; //测试用列表项1
 ListItem_t ListItem2; //测试用列表项2
 ListItem_t ListItem3; //测试用列表项3
-
 void list_task(void *pvParameters)
 {
 	//第一步：初始化列表和列表项
@@ -73,11 +78,9 @@ void list_task(void *pvParameters)
 	vListInitialiseItem(&ListItem1);
 	vListInitialiseItem(&ListItem2);
 	vListInitialiseItem(&ListItem3);
-
 	ListItem1.xItemValue = 40; // ListItem1列表项值为40
 	ListItem2.xItemValue = 60; // ListItem2列表项值为60
 	ListItem3.xItemValue = 50; // ListItem3列表项值为50
-
 	printf("/*******************列表和列表项地址*******************/\r\n");
 	printf("项目                              地址				    \r\n");
 	printf("TestList                          %#x					\r\n", (int)&TestList);
@@ -86,7 +89,6 @@ void list_task(void *pvParameters)
 	printf("ListItem1                         %#x					\r\n", (int)&ListItem1);
 	printf("ListItem2                         %#x					\r\n", (int)&ListItem2);
 	printf("ListItem3                         %#x					\r\n", (int)&ListItem3);
-
 	vListInsert(&TestList, &ListItem1); //插入列表项ListItem1
 	printf("/******************添加列表项ListItem1*****************/\r\n");
 	printf("项目                              地址				    \r\n");
@@ -95,7 +97,6 @@ void list_task(void *pvParameters)
 	printf("/*******************前后向连接分割线********************/\r\n");
 	printf("TestList->xListEnd->pxPrevious    %#x					\r\n", (int)(TestList.xListEnd.pxPrevious));
 	printf("ListItem1->pxPrevious             %#x					\r\n", (int)(ListItem1.pxPrevious));
-
 	vListInsert(&TestList, &ListItem2); //插入列表项ListItem2
 	printf("/******************添加列表项ListItem2*****************/\r\n");
 	printf("项目                              地址				    \r\n");
@@ -106,7 +107,6 @@ void list_task(void *pvParameters)
 	printf("TestList->xListEnd->pxPrevious    %#x					\r\n", (int)(TestList.xListEnd.pxPrevious));
 	printf("ListItem1->pxPrevious             %#x					\r\n", (int)(ListItem1.pxPrevious));
 	printf("ListItem2->pxPrevious             %#x					\r\n", (int)(ListItem2.pxPrevious));
-
 	vListInsert(&TestList, &ListItem3); //插入列表项ListItem3
 	printf("/******************添加列表项ListItem3*****************/\r\n");
 	printf("项目                              地址				    \r\n");
@@ -119,7 +119,6 @@ void list_task(void *pvParameters)
 	printf("ListItem1->pxPrevious             %#x					\r\n", (int)(ListItem1.pxPrevious));
 	printf("ListItem3->pxPrevious             %#x					\r\n", (int)(ListItem3.pxPrevious));
 	printf("ListItem2->pxPrevious             %#x					\r\n", (int)(ListItem2.pxPrevious));
-
 	uxListRemove(&ListItem2); //删除ListItem2
 	printf("/******************删除列表项ListItem2*****************/\r\n");
 	printf("项目                              地址				    \r\n");
@@ -130,7 +129,6 @@ void list_task(void *pvParameters)
 	printf("TestList->xListEnd->pxPrevious    %#x					\r\n", (int)(TestList.xListEnd.pxPrevious));
 	printf("ListItem1->pxPrevious             %#x					\r\n", (int)(ListItem1.pxPrevious));
 	printf("ListItem3->pxPrevious             %#x					\r\n", (int)(ListItem3.pxPrevious));
-
 	TestList.pxIndex = TestList.pxIndex->pxNext; // pxIndex向后移一项，这样pxIndex就会指向ListItem1。
 	vListInsertEnd(&TestList, &ListItem2);		 //列表末尾添加列表项ListItem2
 	printf("/***************在末尾添加列表项ListItem2***************/\r\n");
@@ -147,6 +145,7 @@ void list_task(void *pvParameters)
 	printf("ListItem3->pxPrevious             %#x					\r\n", (int)(ListItem3.pxPrevious));
 }
 ```
+{% endraw %}
 
 ## 5. FreeRTOS调度器原理讲解
 
@@ -164,7 +163,8 @@ void list_task(void *pvParameters)
 
 * 系统滴答定时器（SysTick）中断进行任务切换:
 
-    ```c
+{% raw %}
+```c
     void xPortSysTickHandler( void ) {
     	vPortRaiseBASEPRI(); 
     	if( xTaskIncrementTick() != pdFALSE ) { 
@@ -172,7 +172,8 @@ void list_task(void *pvParameters)
         } 
     	vPortClearBASEPRIFromISR();
     }
-    ```
+```
+{% endraw %}
 
 ## 7. FreeROTS内核控制函数
 
@@ -186,6 +187,7 @@ void list_task(void *pvParameters)
 
 **FreeRTOS 运行时间壮态统计函数`vTaskGetRunTimeStats()`获取任务的运行时间信息：**
 
+{% raw %}
 ```c
 #include "sys.h"
 #include "delay.h"
@@ -194,35 +196,28 @@ void list_task(void *pvParameters)
 #include "string.h"
 #include "FreeRTOS.h"
 #include "task.h"
-
 #define START_TASK_PRIO 1
 #define START_STK_SIZE 128
 TaskHandle_t StartTask_Handler;
 void start_task(void *pvParameters);
-
 #define TASK1_TASK_PRIO 2
 #define TASK1_STK_SIZE 128
 TaskHandle_t Task1Task_Handler;
 void task1_task(void *pvParameters);
-
 #define TASK2_TASK_PRIO 3
 #define TASK2_STK_SIZE 128
 TaskHandle_t Task2Task_Handler;
 void task2_task(void *pvParameters);
-
 #define RUNTIMESTATS_TASK_PRIO 4
 #define RUNTIMESTATS_STK_SIZE 128
 TaskHandle_t RunTimeStats_Handler;
 void RunTimeStats_task(void *pvParameters);
-
 char RunTimeInfo[400]; // 保存任务运行时间信息
-
 int main(void)
 {
 	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_4); //设置系统中断优先级分组4
 	delay_init(168);								//初始化延时函数
 	uart_init(115200);								//初始化串口
-
 	xTaskCreate((TaskFunction_t)start_task,			 //任务函数
 				(const char *)"start_task",			 //任务名称
 				(uint16_t)START_STK_SIZE,			 //任务堆栈大小
@@ -231,7 +226,6 @@ int main(void)
 				(TaskHandle_t *)&StartTask_Handler); //任务句柄
 	vTaskStartScheduler();							 //开启任务调度
 }
-
 void start_task(void *pvParameters)
 {
 	taskENTER_CRITICAL(); //进入临界区
@@ -259,19 +253,16 @@ void start_task(void *pvParameters)
 	vTaskDelete(StartTask_Handler); //删除开始任务
 	taskEXIT_CRITICAL();			//退出临界区
 }
-
 void task1_task(void *pvParameters) {
 	while (1) {
 		vTaskDelay(1000);										  
 	}
 }
-
 void task2_task(void *pvParameters) {	
     while (1) {
 		vTaskDelay(1000);												
 	}
 }
-
 // RunTimeStats任务
 void RunTimeStats_task(void *pvParameters) {
 	u8 key = 0;
@@ -287,6 +278,7 @@ void RunTimeStats_task(void *pvParameters) {
 	}
 }
 ```
+{% endraw %}
 
 结果：![image-20220218143747388](/assets/images/FreeRTOS-study/image-20220218143747388.png)
 
@@ -300,7 +292,8 @@ void RunTimeStats_task(void *pvParameters) {
 
 * `xTaskDelayUntil(TickType_t * const pxPreviousWakeTime, const TickType_t xTimeIncrement)`：阻塞任务，阻塞时间是一个绝对时间，那些需要按照一定的频率 运行的任务可以使用该函数。`task.c`。
 
-    ```c
+{% raw %}
+```c
     void TestTask( void * pvParameters ) {
     	TickType_t PreviousWakeTime; 
         //延时 50ms，但是函数 vTaskDelayUntil()的参数需要设置的是延时的节拍数，不能直接 
@@ -315,7 +308,8 @@ void RunTimeStats_task(void *pvParameters) {
         	vTaskDelayUntil( &PreviousWakeTime, TimeIncrement);
     	}
     }
-    ```
+```
+{% endraw %}
 
 **2）FreeRTOS系统时钟节拍：**
 
@@ -327,6 +321,7 @@ FreeRTOS 提供了一个叫做**队列**的机制来完成任务与任务、任�
 
 **例子：**
 
+{% raw %}
 ```c
 #include "sys.h"
 #include "delay.h"
@@ -337,35 +332,29 @@ FreeRTOS 提供了一个叫做**队列**的机制来完成任务与任务、任�
 #include "task.h"
 #include "queue.h"
 #include "string.h" // 该库来自编译环境，提供strchr()、strlen()、strlcpy()等字符串操作
-
 #define START_TASK_PRIO 1
 #define START_STK_SIZE 256
 TaskHandle_t StartTask_Handler;
 void start_task(void *pvParameters);
-
 #define TASK1_TASK_PRIO 2
 #define TASK1_STK_SIZE 256
 TaskHandle_t Task1Task_Handler;
 void task1_task(void *pvParameters);
-
 #define KEYPROCESS_TASK_PRIO 3
 #define KEYPROCESS_STK_SIZE 256
 TaskHandle_t Keyprocess_Handler;
 void Keyprocess_task(void *pvParameters);
-
 //按键消息队列的数量
 #define KEYMSG_Q_NUM 1       //按键消息队列的数量
 #define MESSAGE_Q_NUM 4      //发送数据的消息队列的数量
 QueueHandle_t Key_Queue;     //按键值消息队列句柄
 QueueHandle_t Message_Queue; //信息队列句柄
-
 //查询Message_Queue队列中的总队列数量和剩余队列数量
 void check_msg_queue(void)
 {
     u8 *p;
     u8 msgq_remain_size; //消息队列剩余大小
     u8 msgq_total_size;  //消息队列总大小
-
     taskENTER_CRITICAL();                                                                            
     msgq_remain_size = uxQueueSpacesAvailable(Message_Queue); //得到队列剩余大小
     msgq_total_size = uxQueueMessagesWaiting(Message_Queue) + uxQueueSpacesAvailable(Message_Queue); //得到队列总大小，总大小=使用+剩余的。
@@ -375,7 +364,6 @@ void check_msg_queue(void)
     myfree(SRAMIN, p);   //释放内存
     taskEXIT_CRITICAL(); //退出临界区
 }
-
 int main(void)
 {
     NVIC_PriorityGroupConfig(NVIC_PriorityGroup_4); //设置系统中断优先级分组4
@@ -385,7 +373,6 @@ int main(void)
     KEY_Init();                                     //初始化按键
     TIM9_Int_Init(5000, 16800 - 1);                 //初始化定时器9，周期500ms
     my_mem_init(SRAMIN);                            //初始化内部内存池
-
     xTaskCreate((TaskFunction_t)start_task,          //任务函数
                 (const char *)"start_task",          //任务名称
                 (uint16_t)START_STK_SIZE,            //任务堆栈大小
@@ -394,15 +381,12 @@ int main(void)
                 (TaskHandle_t *)&StartTask_Handler); //任务句柄
     vTaskStartScheduler();                           //开启任务调度
 }
-
 void start_task(void *pvParameters)
 {
     taskENTER_CRITICAL(); 
-
     //创建消息队列
     Key_Queue = xQueueCreate(KEYMSG_Q_NUM, sizeof(u8));         //创建消息Key_Queue
     Message_Queue = xQueueCreate(MESSAGE_Q_NUM, USART_REC_LEN); //创建消息Message_Queue, USART_REC_LEN是串口最大允许接收的字节数(不大于2的14次方)
-    
     xTaskCreate((TaskFunction_t)task1_task,
                 (const char *)"task1_task",
                 (uint16_t)TASK1_STK_SIZE,
@@ -418,7 +402,6 @@ void start_task(void *pvParameters)
     vTaskDelete(StartTask_Handler); //删除开始任务
     taskEXIT_CRITICAL();            //退出临界区
 }
-
 // task1任务函数
 void task1_task(void *pvParameters) {
     u8 key, i = 0;
@@ -444,7 +427,6 @@ void task1_task(void *pvParameters) {
         vTaskDelay(10); //延时10ms，也就是10个时钟节拍
     }
 }
-
 // Keyprocess_task函数
 void Keyprocess_task(void *pvParameters) {
     u8 key;
@@ -466,6 +448,7 @@ void Keyprocess_task(void *pvParameters) {
     }
 }
 ```
+{% endraw %}
 
 ## 11.FreeRTOS信号量
 
@@ -495,6 +478,7 @@ MCU自带的定时器属于硬件定时器，不同的 MCU 其硬件定时器数
 
 例子：
 
+{% raw %}
 ```c
 #include "sys.h"
 #include "delay.h"
@@ -507,23 +491,18 @@ MCU自带的定时器属于硬件定时器，不同的 MCU 其硬件定时器数
 #include "FreeRTOS.h"
 #include "task.h"
 #include "timers.h" // FreeRTOS软件定时器库函数
-
 #define START_TASK_PRIO 1
 #define START_STK_SIZE 256
 TaskHandle_t StartTask_Handler;
 void start_task(void *pvParameters);
-
 #define TIMERCONTROL_TASK_PRIO 2
 #define TIMERCONTROL_STK_SIZE 256
 TaskHandle_t TimerControlTask_Handler;
 void timercontrol_task(void *pvParameters);
-
 TimerHandle_t AutoReloadTimer_Handle; //周期定时器句柄
 TimerHandle_t OneShotTimer_Handle;	  //单次定时器句柄
-
 void AutoReloadCallback(TimerHandle_t xTimer); //周期定时器回调函数
 void OneShotCallback(TimerHandle_t xTimer);	   //单次定时器回调函数
-
 int main(void) {
 	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_4); //设置系统中断优先级分组4
 	delay_init(168);								//初始化延时函数
@@ -531,7 +510,6 @@ int main(void) {
 	LED_Init();										//初始化LED端口
 	KEY_Init();										//初始化按键
 	my_mem_init(SRAMIN);							//初始化内部内存池
-
 	xTaskCreate((TaskFunction_t)start_task,			 //任务函数
 				(const char *)"start_task",			 //任务名称
 				(uint16_t)START_STK_SIZE,			 //任务堆栈大小
@@ -540,7 +518,6 @@ int main(void) {
 				(TaskHandle_t *)&StartTask_Handler); //任务句柄
 	vTaskStartScheduler();							 //开启任务调度
 }
-
 void start_task(void *pvParameters) {
 	taskENTER_CRITICAL(); //进入临界区
 	//创建软件周期定时器
@@ -568,7 +545,6 @@ void start_task(void *pvParameters) {
 	vTaskDelete(StartTask_Handler); //删除开始任务
 	taskEXIT_CRITICAL();			//退出临界区
 }
-
 // TimerControl的任务函数
 void timercontrol_task(void *pvParameters) {
 	u8 key, num;
@@ -603,13 +579,11 @@ void timercontrol_task(void *pvParameters) {
 		vTaskDelay(10); //延时10ms，也就是10个时钟节拍
 	}
 }
-
 //周期定时器的回调函数
 void AutoReloadCallback(TimerHandle_t xTimer) {
 	static u8 tmr1_num = 0;
 	tmr1_num++;												 //周期定时器执行次数加1
 }
-
 //单次定时器的回调函数
 void OneShotCallback(TimerHandle_t xTimer) {
 	static u8 tmr2_num = 0;
@@ -617,6 +591,7 @@ void OneShotCallback(TimerHandle_t xTimer) {
 	printf("定时器2运行结束\r\n");
 }
 ```
+{% endraw %}
 
 ## 13. FreeRTOS事件标志组
 
@@ -656,7 +631,8 @@ void OneShotCallback(TimerHandle_t xTimer) {
 
     上述这些处理由`configPRE_SLEEP_PROCESSING()`和`configPOST_SLEEP_PROCESSING()`这两个宏完成（在`FreeRTOSConfig.h`定义）。
 
-    ```c
+{% raw %}
+```c
     /********************************************************************************/ 
     /* FreeRTOS 与低功耗管理相关配置 */
     /********************************************************************************/ 
@@ -666,11 +642,13 @@ void OneShotCallback(TimerHandle_t xTimer) {
     #define configPRE_SLEEP_PROCESSING PreSleepProcessing 
     //退出低功耗模式后要做的处理
     #define configPOST_SLEEP_PROCESSING PostSleepProcessing
-    ```
+```
+{% endraw %}
 
     函数`PreSleepProcessing()`和`PostSleepProcessing()`在其他`C`文件中：
 
-    ```c
+{% raw %}
+```c
     //进入低功耗模式前需要处理的事情 
     //ulExpectedIdleTime：低功耗模式运行时间 
     void PreSleepProcessing(uint32_t ulExpectedIdleTime) {
@@ -695,7 +673,8 @@ void OneShotCallback(TimerHandle_t xTimer) {
         RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOG, ENABLE); 
         RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOH, ENABLE);
     }
-    ```
+```
+{% endraw %}
 
 ## 16. FreeRTOS空闲任务
 
@@ -711,11 +690,11 @@ Hook函数（用户需要具体编写这些函数的内容）：
 
 例子：
 
+{% raw %}
 ``` c
 // FreeRTOSConfig.h
 #include configUSE_TICKLESS_IDLE 0 // 关闭低功耗 tickless 模式
 #include configUSE_IDLE_HOOK 1 //使能空闲任务钩子函数
-
 // main.c
 void BeforeEnterSleep(void) { //进入低功耗模式前需要处理的事情 
 	//关闭某些低功耗模式下不使用的外设时钟， 
@@ -749,6 +728,7 @@ void vApplicationIdleHook(void) { //空闲任务钩子函数
     __enable_irq();
 }
 ```
+{% endraw %}
 
 ## 17. FreeRTOS内存管理
 
@@ -770,12 +750,14 @@ FreeRTOS中的内存堆为`ucHeap[]`，大小为`configTOTAL_HEAP_SIZE`，`FreeR
 
 **用法：**
 
+{% raw %}
 ```c
 u8 *buffer;
 buffer = pvPortMalloc(30); // 申请30个字节
 vPortFree(buffer); // 释放内存
 buffer = NULL;
 ```
+{% endraw %}
 
 
 

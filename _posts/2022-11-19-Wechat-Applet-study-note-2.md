@@ -4,7 +4,7 @@ category: [微信小程序]
 tag: [微信小程序, 学习笔记, JavaScript]
 title: 微信小程序学习笔记2
 ---
-{% raw %}
+
 # 三、HTML DOM（文档对象模型）
 **js能够改变html文档所有元素。**
 ![ca1030ddd921f48fff965d7486716e0a.png](/assets/images/wechat-applet-study-note/Image7.png)
@@ -16,15 +16,20 @@ title: 微信小程序学习笔记2
 HTML对象：
 ![8c04ebaf6d1f7749b4c23980924e5e5a.png](/assets/images/wechat-applet-study-note/Image12.png)
 2. 改变元素属性
+{% raw %}
 ```javascript
 document.getElementById("myImage").src = "landscape.jpg";
 ```
+{% endraw %}
 3. 改变CSS
+{% raw %}
 ```javascript
 document.getElementById("p2").style.color = "blue";
 ```
+{% endraw %}
 4. DOM事件（任何元素都可以添加）
 onclick, onload, onunload(离开页面), onmouseover, onmouseout, onmousedown, onmouseup。
+{% raw %}
 ```javascript
 // 事件监听器
 document.getElementById("myBtn").addEventListener("click", displayDate);
@@ -38,9 +43,11 @@ window.addEventListener("resize", function(){
 // 移除事件监听器
 element.removeEventListener("mousemove", myFunction);
 ```
+{% endraw %}
 5. DOM节点
 ![387d651023f65fc1558aa668fa9ac940.png](/assets/images/wechat-applet-study-note/Image13.png)
 parentNode，childNodes[nodenumber]，firstChild，lastChild，nextSibling，reviousSibling。
+{% raw %}
 ```javascript
 var myTitle = document.getElementById("demo").firstChild.nodeValue;
 // 创造新节点
@@ -68,11 +75,14 @@ var parent = document.getElementById("div1");
 var child = document.getElementById("p1");
 parent.replaceChild(para, child);
 ```
+{% endraw %}
 6. HTML DOM集合
+{% raw %}
 ```javascript
 var myCollection = document.getElementsByTagName("p"); // 返回HTMLCollection对象
 myCollection.length;
 myCollection[0];
 // HTMLCollection不是数组，无法使用数组方法：valueOf(), pop(), push(), join()。
 ```
-{% endraw %}  
+{% endraw %}
+

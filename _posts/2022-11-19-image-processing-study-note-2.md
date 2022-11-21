@@ -4,7 +4,7 @@ category: [计算机视觉]
 tag: [数字图像处理, 学习笔记]
 title: 数字图像处理学习笔记2
 ---
-{% raw %}
+
 
 ### 1. 视觉
 眼球结构:
@@ -66,4 +66,4 @@ T()是处理方法。
 ![4a70b5cbc31dac2cd133d4856ca9f9b1.png](/assets/images/image-processing-study-note/Image34.png)
 6. 概率方法 ==> 假设图像的噪声是随机分布的，那就要找到那个分布函数
 
-{% endraw %}  
+

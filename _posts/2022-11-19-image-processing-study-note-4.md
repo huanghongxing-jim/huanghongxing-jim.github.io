@@ -4,7 +4,7 @@ category: [计算机视觉]
 tag: [数字图像处理, 学习笔记]
 title: 数字图像处理学习笔记4
 ---
-{% raw %}
+
 
 形态学基本操作：腐蚀、膨胀，进阶：开运算、闭运算。
 基础理论：集合论。
@@ -35,6 +35,7 @@ title: 数字图像处理学习笔记4
 ![d9a27b11799284758c7d5932643d52ba.png](/assets/images/image-processing-study-note/Image59.png)
 ##### 3. [区域填充](https://www.cnblogs.com/pingwen/p/12245857.html)
 ![637a07ead23edd2a224d2603494aa065.png](/assets/images/image-processing-study-note/Image60.png)
+{% raw %}
 ```matlab
 img = rgb2gray(imread('temp.jpg'));
 BInnerEle = zeros(size(img));
@@ -61,6 +62,7 @@ while 1
     end
 end
 ```
+{% endraw %}
 左边gif是内部填充，右边gif是外部填充：
 ![b5d51d0d47c2e8eda7f7d618d4ff6ee0.gif](/assets/images/image-processing-study-note/video.gif)
 ##### 4. 击中和击不中变换 ==> 图像匹配
@@ -69,4 +71,4 @@ end
 `Boarder边界`、`Hole filling孔洞填充`、`Labeling标记`、`Lowpass filter低通滤波器`、`Hightpass filter高通滤波器`、`Separation分割`、`Skeleton骨架化`、`Segmentation分离`、`Distance距离变换`、`Danlelsson朴素贝叶斯`、`Circle圆拟合`、`Convex Hull凸包算法`。**
 
 
-{% endraw %}  
+

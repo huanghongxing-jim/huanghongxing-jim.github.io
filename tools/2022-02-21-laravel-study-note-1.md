@@ -4,7 +4,7 @@ category: [SprintBoot教程笔记]
 tag: [SpringBoot, 学习笔记] 
 title: 二、配置文件（Spring Boot教程笔记3）
 ---
-
+{% raw %}
 
 # 二、配置文件
 
@@ -18,13 +18,11 @@ title: 二、配置文件（Spring Boot教程笔记3）
 
   ***YAML:和json和xml一样的配置文件，但比他们更合适做配置文件。***
 
-{% raw %}
-```yml
+  ```yml
   # 例子:
   server:
     port: 8081
-```
-{% endraw %}
+  ```
 
 ## 2、YAML 语法
 
@@ -36,13 +34,11 @@ key:(空格)value：表示一对键值对（一定要有空格）。
 
 属性和值都是大小写敏感的。
 
-{% raw %}
 ```yml
 server:
   port: 8081
   path: /hello
 ```
-{% endraw %}
 
 ### 2.值的写法
 
@@ -58,40 +54,32 @@ server:
 
   key: value：在下一行来写对象的属性和值的关系，注意缩进。
 
-{% raw %}
-```yml
+  ```yml
   friends:
     lastName: zhangshan
     age: 20
-```
-{% endraw %}
+  ```
 
   行内写法：
 
-{% raw %}
-```yml
+  ```yml
   friends: {lastName: zhangshan,age: 18}
-```
-{% endraw %}
+  ```
 
 * #### 数组（List， set)
 
-{% raw %}
-```yml
+  ```yml
   pets:
    - cat
    - dog
    - pig
-```
-{% endraw %}
+  ```
 
   行内写法：
 
-{% raw %}
-```yml
+  ```yml
   pets: [cat,dog,pig]
-```
-{% endraw %}
+  ```
 
   
 
@@ -99,7 +87,6 @@ server:
 
 #### 1. 配置文件内容(application.yml)：
 
-{% raw %}
 ```yml
 # application.yml
 person:
@@ -115,7 +102,6 @@ person:
    name: 小狗
    age: 2
 ```
-{% endraw %}
 #### 2. javaBean：
 
 目录层级结构：
@@ -130,7 +116,6 @@ person:
 
    +---- MainApplition.java
 
-{% raw %}
 ```java
 // /src/main/java/com/jim/bean/Person.java
 /**
@@ -146,17 +131,16 @@ public class Person {
     private Integer age;
     private Date birth;
     private Boolean boss;
+
     private Map<String, Object> maps;
     private List<Object> lists;
     private Dog dog;
 ```
-{% endraw %}
 
 ***在IDEA中，Alt+Insert可以快速添加set/get方法和toSring方法。***
 
 #### 3. 在pom.xml中添加配置文件处理器（添加依赖），才能让配置文件与类进行绑定：
 
-{% raw %}
 ```xml
        <!--配置文件处理器，将配置文件与类进行绑定-->
         <dependency>
@@ -165,7 +149,6 @@ public class Person {
             <optional>true</optional>
         </dependency>
 ```
-{% endraw %}
 
 #### 4. 目录结构：
 
@@ -175,35 +158,36 @@ public class Person {
 
 1. 目录结构
 
-   ![1532170349436](/assets/images/spring-boot-develop/1532170349436.png)
+   ![1532170349436](/assets/images/spring-boot-develop/1532170349436.png) 
+
 
 2. SpringBoot单元测试，可以在测试期间很方便的类似编码一样进行自动注入
 
-{% raw %}
-```java
+   ```java
    // /src/test/java/com/jim/MainApplicationTests.java
    package com.jim;
+   
    import org.junit.runner.RunWith;
    import org.springframework.boot.test.context.SpringBootTest;
    import org.springframework.test.context.junit4.SpringRunner;
+   
    @RunWith(SpringRunner.class) // 告诉Spring用SpringRunner引擎启动
    @SpringBootTest // 告诉Spring这是SpringBoot测试用的
    public class HelloWorldMainApplicationTests {
        @Autowired // 1. 将person注入进来，我们要测试person是什么东西
        Person person;
+   
        @Test
        public void contentLoads() {
            System.out.println(person); // 2. 在控制台将person打印出来
        }   // System.out.println()在IDEA中快捷键是sout
    }
-```
-{% endraw %}
+   ```
 
    ***如果写RunWith或SpringBootTest或SpringRunner提示没有这个，那就是说没有注入进来，按Alt+Enter让Spring自己导入进来（它自己会添加依赖，然后将包导入进来）。***
 
 ####  6. 用application.properties做配置
 
-{% raw %}
 ```properties
 # 配置person的值
 person.last-name=zhangshan # last-name == lastName
@@ -215,7 +199,6 @@ person.lists=a,b,c
 person.dog.name=小狗
 person.dog.age=2
 ```
-{% endraw %}
 
 **注：**（解决中文乱码）SpringBoot默认将application.properties用ascii编码，而IDEA用utf-8将application.properties编码，故在IDEA中 File --> settings --> Editor --> File Encoding --> Properties Files(*.properties) , 将文件编码弄成utf-8并打钩。
 
@@ -223,19 +206,20 @@ person.dog.age=2
 
 #### 7.用@Value（）注入，从配置文件获取值
 
-{% raw %}
 ```java
 // @ConfigurationProperties()和@Value()两种注入方法二选一，下面选了@Value()方法，故需要将@ConfigurationProperties()注释掉
 // @ConfigurationProperties(prefix = "person") 
 public class Person {
+    
     @Value("${person.last-name}") // 将配置文件中的person.last-name值赋给lastName
     private String lastName;
+    
     @Value("#{11*2}") // #{}是Spring的表达，#{} = ${}
     private Integer age;
+    
     @Value("true")
     private Boolean boss;
 ```
-{% endraw %}
 
 #### 8.@Value()和@ConfigurationProperties()两者获取配置文件的值比较  
 
@@ -253,30 +237,27 @@ public class Person {
 
 * ***JSR303数据校验：***
 
-{% raw %}
-```java
+  ```java
   // @ConfigurationProperties(prefix = "person")
   @Validated
   public class Person {
       //@Value("${person.last-name}")
       @Email
       private String lastName;
-```
-{% endraw %}
+  ```
 
   * ***@Validated表明这个类需要校验，@Email是lastName的一个检验规则(lastName是否为一个邮箱格式)***
 
   * ***只有@ConfigutationProperties()支持数据检验***
 
-{% raw %}
-```java
+    ```java
     @ConfigurationProperties(prefix = "person")
     @Validated
     public class Person {
+        
         @Email
         private String email;
-```
-{% endraw %}
+    ```
 
   **如果说我们只是在业务逻辑中需要获取一下配置文件的某项值，不需要将配置文件的某一个大类全部导入，那么就用@Value()。**
 
@@ -286,7 +267,6 @@ public class Person {
 
 ​ 1. @ConfigutationProperties()只能将全局配置文件（application.properties或者application.yml）将类进行绑定，而@PropertySource能加载指定的配置文件。
 
-{% raw %}
 ```java
 // /src/main/java/com/jim/bean/Person.java
 @Component
@@ -294,11 +274,9 @@ public class Person {
 @PropertySource(value = {"classpath:person.properties"})
 public class Person {
 ```
-{% endraw %}
 
 ​ 配置文件在resources里：person.propeties。
 
-{% raw %}
 ```yml
 # /src/main/resources/person.properties
 person.last-name=zhangshan
@@ -310,35 +288,34 @@ person.lists=a,b,c
 person.dog.name=小狗
 person.dog.age=2
 ```
-{% endraw %}
 
 ​ 2. @ImportResource()
 
-{% raw %}
 ```java
 // /src/main/java/com/jim/HelloMain.java
 @ImportResource(locations = {"classpath:beans.xml"})
 @SpringBootApplication
 public class HelloMain {
 ```
-{% endraw %}
 
 ​ beans.xml是我们自定义的一个Spring配置文件，放在resources下，我们想让它导入进来并生效，得在**一个配置类**上标注@ImportResource(locations = {"classpath:beans.xml"})，上述例子是标注在主程序（主配置类）上。
 
  3. SpringBoot推荐给容器添加组件的方式是采用全注解，即配置类==Spring自定义配置文件，使用@Bean给容器中添加组件。
 
-{% raw %}
-```java
+    ```java
     // /src/main/java/com/jim/config/MyAppConfig.java
     package com.jim.config;
+    
     import com.jim.service.HelloService;
     import org.springframework.context.annotation.Bean;
     import org.springframework.context.annotation.Configuration;
+    
     /**
      * @Configutation: 指明当前类是一个配置类，能替代之前的自定义的Spring配置文件
      */
     @Configuration
     public class MyAppConfig {
+        
         // 将方法的返回值添加到Spring容器中，容器中的HelloService组件默认的id就是方法名helloService
         @Bean
         public HelloService helloService() {
@@ -346,8 +323,7 @@ public class HelloMain {
             return new HelloService();
         }
     }
-```
-{% endraw %}
+    ```
 
     * 这是自定义的一个配置类：com.jim.config.MyAppConfig.java。
 
@@ -355,4 +331,4 @@ public class HelloMain {
 
 ![1532195706379](/assets/images/spring-boot-develop/1532195706379.png)
 
-
+{% endraw %}  

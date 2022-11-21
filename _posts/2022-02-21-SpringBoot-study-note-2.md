@@ -4,7 +4,7 @@ category: [SprintBoot教程笔记]
 tag: [SpringBoot, 学习笔记] 
 title: 一、Spring Boot入门（Spring Boot教程笔记2）
 ---
-{% raw %}
+
 
 ##  5.Hello World探究
 
@@ -12,6 +12,7 @@ title: 一、Spring Boot入门（Spring Boot教程笔记2）
 
 #### 1.父项目
 
+{% raw %}
 ```xml
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -19,17 +20,20 @@ title: 一、Spring Boot入门（Spring Boot教程笔记2）
         <version>1.5.9.RELEASE</version>
     </parent>
 ```
+{% endraw %}
 
 这个的**父项目**是Spring Boot的版本仲裁中心，里面定义了各个场景的**版本号**，所以我们导入依赖默认是不需要写版本的（没有在其**父项目**的dependencies里面管理的依赖自然需要声明版本号）。
 
 #### 2.导入的依赖
 
+{% raw %}
 ```xml
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 ```
+{% endraw %}
 
 **spring-boot-starter**-web : 
 
@@ -42,6 +46,7 @@ title: 一、Spring Boot入门（Spring Boot教程笔记2）
 
 ### 2. 主程序类，主入口
 
+{% raw %}
 ```java
 /**
  * @SpringBOotApplication 来标注一个主程序类，说明这是一个Spring Boot应用
@@ -54,11 +59,13 @@ public class HelloWorldMainApplication {
     }
 }
 ```
+{% endraw %}
 
 **@SpringBootApplication:** Spring Boot 应用标注在某个类上说明这个类是Spring Boot的主配置类，Spring Boot就应该运行这个类的main方法来启动Spring Boot应用。
 
 进一步查看知道，@SpringBootApplication也是由很多组件构成的。
 
+{% raw %}
 ```java
 // 这是SpringBootApplication这个类的开头注解
 @Target(ElementType.TYPE)
@@ -72,6 +79,7 @@ public class HelloWorldMainApplication {
     @Filter(type = FilterType.CUSTOM, classes = AutoConfigurationExcludeFilter.class) })
 public @interface SpringBootApplication {
 ```
+{% endraw %}
 
 * **@SpringBootConfiguration**  
 
@@ -87,21 +95,25 @@ public @interface SpringBootApplication {
 
   原理：
 
-  ```java
+{% raw %}
+```java
   // @EnableAutoConfiguration的注解
   @AutoConfigurationPackage
   @Import(EnableAutoConfigurationImportSelector.class)
   public @interface EnableAutoConfiguration {
-  ```
+```
+{% endraw %}
 
    1. @AutoConfigurationPackage：自动配置包 。  
 
       原理：
 
-      ```java
+{% raw %}
+```java
       @Import(AutoConfigurationPackages.Registrar.class)
       public @interface AutoConfigurationPackage {
-      ```
+```
+{% endraw %}
 
       ***@AutoConfigurationPackage利用@Import指定Register给容器中导入了一些组件。***这些组件就是主配置类（@SpringBootApplication标注的类）的所在包及下面所有子包里面的所有组件，@AutoConfigurationPackage都将其扫描到Spring容器中。  
 
@@ -129,9 +141,9 @@ public @interface SpringBootApplication {
 
 ## 6.Spring Boot应用
 
+{% raw %}
 ```java
 // com.jim.controller.HelloCotroller.java
-
 @ResponseBody // 写在这里表明这个类的所有方法返回的数据直接写给浏览器(如果是对象转为json数据)
 @Controller
 public class HelloCotroller {
@@ -141,6 +153,7 @@ public class HelloCotroller {
     }
 }
 ```
+{% endraw %}
 
 * @ResponseBody + @Controller == @RestController 
 * 使用Spring Initializer快速创建Spring Boot项目（一定要联网）
@@ -150,4 +163,4 @@ public class HelloCotroller {
     * application.properties：Spring Boot的配置文件。虽说Spring Boot的所有都是自动配置的，但是自己可以通过这里来改动Spring Boot的默认配置。
   * ecplise中创建的方式是：File -> New -> Spring Starter Project 或者 File -> new -> Other -> Spring Starter Project。
 
-{% endraw %}  
+

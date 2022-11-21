@@ -4,12 +4,13 @@ category: [网络训练]
 tag: [Pytorch网络训练, 自动混合精度, 经验]
 title: Pytorch自动混合精度训练
 ---
-{% raw %}
+
 
 # `autocast` + `GradScaler`
 
 # 一、单卡例程
 
+{% raw %}
 ```python
 from torch.cuda import amp
 model = Net() # 创建model，默认是torch.FloatTensor
@@ -33,11 +34,13 @@ for epoch in epochs:
         # 正常更新权重
         optimizer.zero_grad()
 ```
+{% endraw %}
 
 # 二、多卡并行例程
 
 **`amp`只能在单GPU环境下使用，多卡训练需要在网络的`forward()`函数里使用`with autocast()`。**
 
+{% raw %}
 ```python
 class Net(nn.Module):
     def forward(self, x):
@@ -45,6 +48,7 @@ class Net(nn.Module):
     		...
     	return
 ```
+{% endraw %}
 
 
-{% endraw %}  
+

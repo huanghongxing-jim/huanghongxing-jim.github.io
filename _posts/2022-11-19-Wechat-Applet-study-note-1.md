@@ -6,6 +6,7 @@ title: 微信小程序学习笔记1
 ---
 
 # 一、语法
+{% raw %}
 ```javascript
 document.getElementById("demo").innerHTML = "Hello JavaScript";
 // 单引号和双引号一起用
@@ -15,7 +16,9 @@ document.getElementById("demo").style.fontSize = "25px";
 document.getElementById("demo").style.display="none";
 document.getElementById("demo").style.display="block";
 ```
+{% endraw %}
 1. 形式：
+{% raw %}
 ```javascript
 // 1. 格式：
 <script type="text/javascript">
@@ -40,6 +43,7 @@ function myFunction() {
 3. 外部脚本
 <script src="myScript.js"></script>
 ```
+{% endraw %}
 2. 输出：
 ![344586a87711ec714e775ebf39f4c26b.png](/assets/images/wechat-applet-study-note/Image1.png)
 3. JavaScript关键词：
@@ -47,13 +51,16 @@ function myFunction() {
 * **debugger(停止执行 JavaScript，如果调用函数可用，调用调试函数）**，function，var
 4. JavaScript大小写敏感。
 5. JavaScript变量 ==> 数值和字符串
+{% raw %}
 ```javascript
 var pi = 3.14;
 var person = "Bill Gates";
 var answer = 'How are you!';
 var person = "Bill Gates", carName = "porsche", price = 15000;
 ```
+{% endraw %}
 **注：**
+{% raw %}
 ```javascript
 // 1. undefined
 var a;
@@ -68,12 +75,14 @@ var x = "8" + 3 + 5;
 var x = 911 + 7 + "Porsche"; // 输出：918Porsche
 var x = "Porsche" + 911 + 7; // 输出：Porsche9117
 ```
+{% endraw %}
 6. 运算符：+，-， *， /，%，++，--，**\*\***
 \===：等值等型
 \!==：不等值或不等型
 **typeof**，**instanceof（返回true）**
 7. 数据类型
 原始：string，number，boolean，null，undefined。
+{% raw %}
 ```javascript
 var b = true; // 布尔型
 var length = 7; // 数字
@@ -85,16 +94,20 @@ var x; // 现在 x 是 undefined
 var x = 7; // 现在 x 是数值
 var x = "Bill"; // 现在 x 是字符串值
 ```
+{% endraw %}
 8. undefined, 空值""，null
 * 可以通过设置值为undefined清空对象。
 * undefined与null的值相等，但类型不相等。
 9. 函数
+{% raw %}
 ```javascript
 function myFunction(p1, p2) {
     return p1 * p2;      
 }
 ```
+{% endraw %}
 10. 对象
+{% raw %}
 ```javascript
 var car = {type:"porsche", model:"911", color:"white"};
 var person = {
@@ -106,9 +119,11 @@ var person = {
   }
 };
 ```
+{% endraw %}
 11. 事件 
 
 ![a216544a53ab2b95e99d7aa1747aa6d4.png](/assets/images/wechat-applet-study-note/Image2.png)
+
 {% raw %}
 ```html
 // 用法：
@@ -117,7 +132,9 @@ var person = {
 <button onclick='document.getElementById("demo").innerHTML=Date()'>现在的时间是？</button>
 ```
 {% endraw %}
+
 12.字符串
+{% raw %}
 ```javascript
 var s = “abcdefg”;
 s.length; // 长度
@@ -149,7 +166,9 @@ txt.split(" "); // 用空格分隔
 txt.split("|"); // 用竖线分隔
 txt.split(""); // 分隔为字符
 ```
+{% endraw %}
 1.  数字
+{% raw %}
 ```javascript
 // 科学计数法
 var x = 123e5; // 12300000
@@ -183,12 +202,16 @@ Number(x);
 parseFloat(x);
 parseInt(x);
 ```
+{% endraw %}
 14. 数组
+{% raw %}
 ```javascript
 var arr = new Array(1, 2, 3);
 var arr = [];
 ```
+{% endraw %}
 数组是对象。
+{% raw %}
 ```javascript
 // 数组属性
 arr.length;
@@ -257,7 +280,6 @@ var someOver18 = numbers.some(myFunction);
 function myFunction(value, index, array) {
   return value > 18;
 }
- 
 // 数组搜索（只返回第一个的值）
 var numbers = [4, 9, 16, 25, 29];
 var first = numbers.find(myFunction);
@@ -265,7 +287,9 @@ function myFunction(value, index, array) {
   return value > 18;
 }
 ```
+{% endraw %}
 15. 日期
+{% raw %}
 ```javascript
 // 创建
 new Date();
@@ -304,7 +328,9 @@ if (someday > today) {
   text = "今天在 2049 年 1 月 16 日之后";
 }
 ```
+{% endraw %}
 16. 数学（不用导包）
+{% raw %}
 ```javascript
 Math.round() // 四舍五入
 Math.pow() // 幂
@@ -334,10 +360,12 @@ Math.LN10 // 返回 10 的自然对数
 Math.LOG2E // 返回以 2 为底的 e 的对数（约等于 1.414）
 Math.LOG10E // 返回以 10 为底的 e 的对数（约等于0.434）
 ```
+{% endraw %}
 **JavaScript可以使用三元运算符？进行操作。**
 17. switch
 **使用严格比较\=\=\=。**
 18. for/in
+{% raw %}
 ```javascript
 var person = {fname:"Bill", lname:"Gates", age:62}; 
 var text = "";
@@ -346,16 +374,20 @@ for (x in person) {
     text += person[x];
 }
 ```
+{% endraw %}
 19. 正则
 * 只适用于字符串的两个方法：`search()`和`replace()`。
 * 修饰符：
 ![8c1c47d4be3e9b7e57ab5822c9134c89.png](/assets/images/wechat-applet-study-note/Image3.png)
+{% raw %}
 ```javascript
 var res = str.replace(/microsoft/i, "W3School"); 
 var res = str.replace(/microsoft/g, "W3School"); 
 var res = str.replace(/microsoft/m, "W3School"); 
 ```
+{% endraw %}
 * 方法：
+{% raw %}
 ```javascript
 // 是否有e
 var patt = /e/;
@@ -365,7 +397,9 @@ patt.test("The best things in life are free!"); // 输出：true
 // 搜索匹配文本
 /e/.exec("The best things in life are free!"); // 输出：e
 ```
+{% endraw %}
 20. 异常
+{% raw %}
 ```javascript
 try {
 }
@@ -376,16 +410,20 @@ finally {
 throw "Too big";    // 抛出文本
 throw 500;          //抛出数字
 ```
+{% endraw %}
 21. 作用域
 **为尚未声明的变量赋值，此变量会自动成为全局变量。**
+{% raw %}
 ```javascript
 function myFunction() {
     carName = "porsche";
 }
 // 函数myFunction没有声明carName就使用这个变量，这个变量直接成为全局变量
 ```
+{% endraw %}
 JavaScript可以先使用变量之后再声明 ==> 提升(hoisting)
 **用 let 或 const 声明的变量和常量不会被提升。**
+{% raw %}
 ```javascript
 // let 声明的是块作用域
 { 
@@ -395,25 +433,33 @@ JavaScript可以先使用变量之后再声明 ==> 提升(hoisting)
 // x 不是全局变量
 // y 是全局变量
 ```
+{% endraw %}
 **声明：const、let、var。**
 22. 严格模式（开头声明）
+{% raw %}
 ```javascript
 "use strict";
 x = 3.14; 
 ```
+{% endraw %}
 23. this
 * 指 该对象
 * 单独使用 ==> 全局对象[object Window]
+{% raw %}
 ```javascript
 function myFunction() {
   return this;
 }
 ```
+{% endraw %}
 * 指的是接收此事件的 HTML 元素
+{% raw %}
 ```javascript
 <button onclick="this.style.display='none'">  点击来删除我！</button>
 ```
+{% endraw %}
 * 显式邦定（ call() 和 apply() ）
+{% raw %}
 ```javascript
 var person1 = {
   fullName: function() {
@@ -426,16 +472,20 @@ var person2 = {
 }
 person1.fullName.call(person2);  // 会返回 "Bill Gates"
 ```
+{% endraw %}
 24. 调试
 `debugger`是设置断点的效果。
+{% raw %}
 ```javascript
 var x = 15 * 5;
 debugger;
 document.getElementbyId("demo").innerHTML = x; 
 ```
+{% endraw %}
 25. 风格习惯
 *  在运算符（ = + - * / ）周围以及逗号之后添加空格
 * 对象：
+{% raw %}
 ```javascript
 var person = {
     firstName: "Bill",
@@ -444,17 +494,21 @@ var person = {
     eyeColor:  "blue"
 };
 ```
+{% endraw %}
 * 常量大写
 * 避免全局变量、new、===、eval()
 26. 性能
 ![c12fc24f93a77735e05e1b3625db85a2.png](/assets/images/wechat-applet-study-note/Image4.png)
+{% raw %}
 ```javascript
 var obj;
 obj = document.getElementById("demo"); // 将DOM元素存储为变量
 obj.innerHTML = "Hello"; 
 ```
+{% endraw %}
 js脚本放底部。
 27. json
+{% raw %}
 ```javascript
 {
 }"employees":[
@@ -467,7 +521,9 @@ js脚本放底部。
 var j = JSON.parse(jsonText);
 j.employees[1].firstName;
 ```
+{% endraw %}
 28. 表单
+{% raw %}
 ```html
 <form name="myForm" action="/action_page_post.php" onsubmit="return validateForm()" method="post">
 姓名：<input type="text" name="fname">
@@ -483,14 +539,18 @@ function validateForm() {
 }
 </script>
 ```
+{% endraw %}
 input输入验证：
 * input本身属性
+{% raw %}
 ```javascript
 // input的required属性保证一定有值
  <input type="text" name="fname" required>
 ```
+{% endraw %}
 ![85f8973c76d47ec6001382403fd4347e.png](/assets/images/wechat-applet-study-note/Image5.png)
 * 本身属性 搭配 来自DOM的方法![df00c3d67c6e60d96d9f2e7a847a7db7.png](/assets/images/wechat-applet-study-note/Image6.png)
+{% raw %}
 ```html
 <input id="id1" type="number" min="100" max="300" required>
 <button onclick="myFunction()">OK</button>
@@ -503,8 +563,10 @@ input输入验证：
 }
 </script>
 ```
+{% endraw %}
 # 二、对象
 1. 访问属性
+{% raw %}
 ```javascript
 objectName.property // person.age
 objectName["property"] // person["age"]
@@ -522,7 +584,9 @@ person.nationality = "English"; // nationality是新属性
 // 删除属性
 delete person.age; // 或 delete person["age"];
 ```
+{% endraw %}
 2. 方法
+{% raw %}
 ```javascript
 var person = {
   firstName: "Bill",
@@ -533,8 +597,10 @@ var person = {
   }
 };
 ```
+{% endraw %}
 3. 对象访问器（ Getter 和 Setter ）
 用处：自定义如何 访问 和 设置 对象的属性。
+{% raw %}
 ```javascript
 // 创建对象：
 var person = {
@@ -552,7 +618,9 @@ var person = {
 person.lang = "zh";
 document.getElementById("demo").innerHTML = person.lang;
 ```
+{% endraw %}
 4. 对象构造器（有点像 类）
+{% raw %}
 ```javascript
 function Person(first, last, age, eyecolor) {
     this.firstName = first;
@@ -569,5 +637,6 @@ Person.prototype.name = function() {
     return this.firstName + " " + this.lastName;
 };
 ```
+{% endraw %}
 5. 值传递 和 引用传递
 函数参数里，对象通过引用传递，值通过值传递。

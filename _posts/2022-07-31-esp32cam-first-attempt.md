@@ -4,7 +4,7 @@ category: [esp32]
 tag: [esp32cam, 安信可, 无线图传, Arduino]
 title: esp32cam学习笔记
 ---
-{% raw %}
+
 
 # 一、硬件介绍
 
@@ -17,12 +17,14 @@ title: esp32cam学习笔记
 ## 1. 准备
 
 ### 1.1 Arduino IDE的`附加开发板管理网址`：
-```
+{% raw %}
+```shell
 https://www.arduino.cn/package_esp32_index.json
 https://dl.espressif.com/dl/package_esp32_index.json
 https://arduino.esp8266.com/stable/package_esp8266com_index.json
 https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json
 ```
+{% endraw %}
 
 ### 1.2 安装：工具 -> 开发板管理器 -> **esp32**。
 
@@ -52,31 +54,27 @@ https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32
 
 ## 5. 程序调用
 
+{% raw %}
 ```python
 import cv2 as cv
 from Config import Config
 import requests
-
 class Config:
     def __init__(self, ip_addr="192.168.3.26"):
         self.cam_ip_addr = "http://" + ip_addr
-
     def get_stream_addr(self):
         return self.cam_ip_addr + ":81/stream"
-
     def set(self, var: str, val: int):
         content = self.cam_ip_addr + f"/control?var={var}&val={val}"
         r = requests.get(content)
         if not 200 == r.status_code:
             print(f"设置{var}为{val}失败。")
-
 c = Config("192.168.3.26")
 c.set("framesize", 10)
 c.set("brightness", 2)
 c.set("contrast", 0)
 c.set("quality", 10)
 #c.set("face detect", 0)
-
 capture = cv.VideoCapture(c.get_stream_addr())
 while(True):
     ret, frame = capture.read()
@@ -85,5 +83,6 @@ while(True):
     if cv.waitKey(1) == ord('q'):
         break
 ```
+{% endraw %}
 
-{% endraw %}  
+

@@ -4,7 +4,7 @@ category: [SprintBoot教程笔记]
 tag: [SpringBoot, 学习笔记] 
 title: 四、Web开发（Spring Boot教程笔记7）
 ---
-{% raw %}
+
 
 ## 4.SpringBootMVC自动配置原理
 
@@ -40,14 +40,13 @@ web的所有场景：`org.springframework.boot.autoconfigure.web`。
 
 ​	编写一个配置类（有`@Configuration`），是`WebMvcConfigurerAdapter`类型，不能有`@EnableWebMvc`注解:
 
+{% raw %}
 ```java
 // /src/java/com.jimcom.springboot/config/MyConfig.java
 package com.jimcom.springboot.config;
-
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
-
 @Configuration
 public class MyConfig extends WebMvcConfigurerAdapter {
     // 在IDEA中可以先Ctrl+O查看可以重写哪些方法，即可添加哪些配置
@@ -59,6 +58,7 @@ public class MyConfig extends WebMvcConfigurerAdapter {
     }
 }
 ```
+{% endraw %}
 
 ​	位置：
 
@@ -75,4 +75,4 @@ public class MyConfig extends WebMvcConfigurerAdapter {
 1. SpringBoot在自动配置很多组件的时候，先看容器中有没有用户自己配置（`@Bean`，`@Component`），如果有就用用户自己配置的，如果没有，才自动配置，如果有些组件可以有多个（譬如`ViewResolver`），就将用户配置的和自己默认的组合起来。
 2. 在SprintBoot中有非常多的`xxxConfigurer`帮助我们进行扩展配置。
 
-{% endraw %}  
+

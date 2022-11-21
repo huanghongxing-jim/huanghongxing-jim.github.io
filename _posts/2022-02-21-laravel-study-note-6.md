@@ -4,7 +4,7 @@ category: [Larave学习笔记]
 tag: [Larave, 学习笔记] 
 title: Larave学习笔记6
 ---
-{% raw %}  
+
 
 #### 2.发送邮件
 
@@ -14,18 +14,15 @@ title: Larave学习笔记6
 
 	配置文件：
 
+{% raw %}
 ```php
 // config/mail.php
 <?php
-
 return [
 	// 支持："smtp", "sendmail", "mailgun", "mandrill", "ses","sparkpost", "log", "array"
     'driver' => env('MAIL_DRIVER', 'smtp'),
-
     'host' => env('MAIL_HOST', 'smtp.mailgun.org'),
-
     'port' => env('MAIL_PORT', 587),
-
     'from' => [ // 全局的发件人邮件地址以及名称
         'address' => env('MAIL_FROM_ADDRESS', 'hello@example.com'),
         'name' => env('MAIL_FROM_NAME', 'Example'),
@@ -35,21 +32,20 @@ return [
 	// STMP的账号密码
     'username' => env('MAIL_USERNAME'),
     'password' => env('MAIL_PASSWORD'),
-
     'sendmail' => '/usr/sbin/sendmail -bs',
-
     'markdown' => [
         'theme' => 'default',
-
         'paths' => [
             resource_path('views/vendor/mail'),
         ],
     ],
 ];
 ```
+{% endraw %}
 
 1. 在`.env`中进行配置：
 
+{% raw %}
 ```properties
 MAIL_DRIVER=smtp # 使用的服务
 MAIL_HOST=smtp.mailtrap.io # 服务器地址
@@ -58,29 +54,30 @@ MAIL_USERNAME=jim # 账号
 MAIL_PASSWORD=passowrd
 MAIL_ENCRYPTION=ssl # 协议
 ```
+{% endraw %}
 
 1. 控制器以及路由
 
+{% raw %}
 ```php
 Route::any('mail', ['uses' => 'StudentController@mail']);
 ```
+{% endraw %}
 
 控制器：
 
 - 以`raw`方式发送邮件：
 
+{% raw %}
 ```php
 // StudentController.php
 <?php
-
 namespace App\Http\Controllers;
-
 use App\Student;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
-
 class StudentController extends Controller
 {
    public function mail() {
@@ -92,11 +89,13 @@ class StudentController extends Controller
    }
 }
 ```
+{% endraw %}
 
 - 以`html`方式发送邮件：
 
 创建一个`html`文件，即视图：
 
+{% raw %}
 ```php
 <!--resources/views/student/mail.blade.php-->
 <!DOCTYPE html>
@@ -109,21 +108,20 @@ class StudentController extends Controller
 </body>
 </html>
 ```
+{% endraw %}
 
 	控制器：
 
+{% raw %}
 ```php
 // StudentController.php
 <?php
-
 namespace App\Http\Controllers;
-
 use App\Student;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
-
 class StudentController extends Controller
 {
    public function mail() {
@@ -134,6 +132,7 @@ class StudentController extends Controller
    }
 }
 ```
+{% endraw %}
 
 #### 3.缓存使用
 
@@ -145,36 +144,30 @@ class StudentController extends Controller
 
 配置文件：
 
+{% raw %}
 ```php
 // config/cache.php
 <?php
-    
 return [
 	// 支持"apc", "array", "database", "file", "memcached", "redis"，默认是file,即文件缓存
     'default' => env('CACHE_DRIVER', 'file'),
-
 	// 缓存配置
     'stores' => [
-
         'apc' => [
             'driver' => 'apc', // 驱动是apc
         ],
-
         'array' => [
             'driver' => 'array',
         ],
-
         'database' => [
             'driver' => 'database',
             'table' => 'cache',
             'connection' => null,
         ],
-
         'file' => [
             'driver' => 'file',
             'path' => storage_path('framework/cache/data'),
         ],
-
         'memcached' => [
             'driver' => 'memcached',
             'persistent_id' => env('MEMCACHED_PERSISTENT_ID'),
@@ -193,34 +186,29 @@ return [
                 ],
             ],
         ],
-
         'redis' => [
             'driver' => 'redis',
             'connection' => 'default',
         ],
-
     ],
 	// 缓存前缀
     'prefix' => 'laravel',
-
 ];
 ```
+{% endraw %}
 
 控制器：
 
+{% raw %}
 ```php
 // Controllers/StudentController.php
 <?php
-
 namespace App\Http\Controllers;
-
-
 use App\Student;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
-
 class StudentController extends Controller
 {
     public function cache1() {
@@ -233,9 +221,11 @@ class StudentController extends Controller
     }
 }
 ```
+{% endraw %}
 
 	`add()`:添加。
 
+{% raw %}
 ```php
 public function cache1() {
     // add(),如果对象已经存在,就添加失败，如果对象不存在，添加成功
@@ -243,17 +233,21 @@ public function cache1() {
     $bool = Cache::add('key1', 'val1', '10');
 }
 ```
+{% endraw %}
 
 	`forever()`：永久的保存对象到缓存中。	
 
+{% raw %}
 ```php
 public function cache1() {
     Cache::forever('key1', 'val1');
 }
 ```
+{% endraw %}
 
 	`has()`:判断缓存中的一个`key`值存不存在。
 
+{% raw %}
 ```php
 public function cache1() {
     if (Cache::has('key')) {
@@ -263,22 +257,27 @@ public function cache1() {
     }
 }
 ```
+{% endraw %}
 
 	`pull`:取缓存中的`key`值，然后删了这个`key`。
 
+{% raw %}
 ```php
 public function cache1() {
     $val = Cache::pull('key');
 }
 ```
+{% endraw %}
 
 	`forget()`:从缓存中删除对象，删除成功返回`true`，返回一个`bool`值。
 
+{% raw %}
 ```php
 public function cache1() {
     $bool = Cache::forget('key');
 }
 ```
+{% endraw %}
 
 #### 4.错误和日志
 
@@ -290,6 +289,7 @@ public function cache1() {
 
 可在`.env`里开启和调试：
 
+{% raw %}
 ```properties
 APP_NAME=Laravel
 APP_ENV=local
@@ -297,34 +297,30 @@ APP_KEY=base64:KyJsuwkhScgKGjZ2cUJrt3annTBQkSBVDTq7wUXtvqo=
 APP_DEBUG=true # 默认开启调试模式
 APP_LOG_LEVEL=debug
 APP_URL=http://localhost
-
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
 DB_PORT=3306
 DB_DATABASE=student
 DB_USERNAME=root
 DB_PASSWORD=
-
 BROADCAST_DRIVER=log
 CACHE_DRIVER=file
 SESSION_DRIVER=file
 QUEUE_DRIVER=sync
-
 REDIS_HOST=127.0.0.1
 REDIS_PASSWORD=null
 REDIS_PORT=6379
-
 MAIL_DRIVER=smtp
 MAIL_HOST=smtp.mailtrap.io
 MAIL_PORT=2525
 MAIL_USERNAME=jim
 MAIL_PASSWORD=passowrd
 MAIL_ENCRYPTION=ssl
-
 PUSHER_APP_ID=
 PUSHER_APP_KEY=
 PUSHER_APP_SECRET=
 ```
+{% endraw %}
 
 	默认是开启调试模式的，如果发生错误，`laravel`会在网页打印出错误栈。
 	
@@ -336,18 +332,15 @@ PUSHER_APP_SECRET=
 
 自定义`http`异常：
 
+{% raw %}
 ```php
 <?php
-
 namespace App\Http\Controllers;
-
-
 use App\Student;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
-
 class StudentController extends Controller
 {
     public function error() {
@@ -359,6 +352,7 @@ class StudentController extends Controller
     }
 }
 ```
+{% endraw %}
 
 `http`异常的视图位置：
 
@@ -372,50 +366,46 @@ class StudentController extends Controller
 
 `config/app.php`：
 
+{% raw %}
 ```php
 <?php
-
 return [
-    
     ...
     // 日志定义的位置
 	// 支持"single", "daily", "syslog", "errorlog"模式，默认是single模式
     'log' => env('APP_LOG', 'single'), 
-
     'log_level' => env('APP_LOG_LEVEL', 'debug'),
-
     ...
-
 ];
 ```
+{% endraw %}
 
 	配置日志模式：
 
+{% raw %}
 ```php
 # 在.env中进行配置
 # APP_LoG原本的.env里是没有的，是自己添加的，只能配置"single", "daily", "syslog", "errorlog"这几种模式
 APP_LoG=single 
 APP_LOG_LEVEL=debug
 ```
+{% endraw %}
 
 	这样是会在![1535098804878](/assets/images/laravel-develop-study/1535098804878.png)这里生成日志文件:`laravel.log`。
 	
 	使用日志：
 
+{% raw %}
 ```php
 // Controllers/StudentController.php
 <?php
-
 namespace App\Http\Controllers;
-
-
 use App\Student;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
-
 class StudentController extends Controller
 {
     public function log() {
@@ -423,7 +413,6 @@ class StudentController extends Controller
         // use Illuminate\Support\Facades\Log;
         Log::info("这是一个info级别的日志");
         Log::warning("这是一个warning级别的日志");
-        
         // Log::error可以传进一个对象或者数组，它会自动在日志文件里序列化成
         // 一个json格式的数据
         Log::error("这是一个error级别的日志",
@@ -431,9 +420,10 @@ class StudentController extends Controller
     }
 }
 ```
+{% endraw %}
 
 	`daily`的`log`模式，会每天生成一个日志：
 
 ![1535099439063](/assets/images/laravel-develop-study/1535099439063.png)
 
-{% endraw %}  
+

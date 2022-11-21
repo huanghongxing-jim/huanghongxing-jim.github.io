@@ -4,7 +4,7 @@ category: [SprintBoot教程笔记]
 tag: [SpringBoot, 学习笔记] 
 title: 四、Web开发（Spring Boot教程笔记6）
 ---
-{% raw %}
+
 
 # 四、Web开发
 
@@ -18,10 +18,12 @@ SpringBoot开发步骤：
 
 清楚两个点：
 
+{% raw %}
 ```shell
 1. xxxxAutoConfiguration:帮我们给容器中自动配置了组件
 2. xxxxProperties：封装了配置文件的配置类
 ```
+{% endraw %}
 
 ## 1.SpringBoot对静态资源的映射规则
 
@@ -29,23 +31,27 @@ SpringBoot开发步骤：
 
    在`pom.xml`中添加依赖：
 
-   ```xml
+{% raw %}
+```xml
    <!--引入jquery-->
    <dependency>
        <groupId>org.webjars</groupId>
        <artifactId>jquery</artifactId>
        <version>3.3.1</version>
    </dependency>
-   ```
+```
+{% endraw %}
 
 2. 静态资源文件夹：
 
-   ```java
+{% raw %}
+```java
    classpath:/META-INF/resources/
    classpath:/resources/
    classpath:/static/
    classpath:/public/
-   ```
+```
+{% endraw %}
 
    可以用`localhost:8080/static_file`访问静态资源文件，首先这个静态资源文件是放在上面四个地方其中一个的。`resources`就是`classpath`：![2018-08-08_222440](/assets/images/spring-boot-develop/2018-08-08_222440.png)
 
@@ -59,11 +65,13 @@ SpringBoot开发步骤：
 
 5. 更改静态资源文件夹：
 
-   ```properties
+{% raw %}
+```properties
    # application.properties
    spring.resources.static-locations=classpath:/hello/,classpath:/com/
    # 这是个数组，这样配置后classpath:/hello/和classpath:/com/就成了新的静态资源文件夹
-   ```
+```
+{% endraw %}
 
 ## 2.模板引擎
 
@@ -79,47 +87,48 @@ SpringBoot推荐使用Thymeleaf模板引擎。
 
 在`pom.xml`中添加依赖：
 
+{% raw %}
 ```xml
 <dependency>
 	<groupId>org.springframework.boot</groupId>
 	<artifactId>spring-boot-starter-thymeleaf</artifactId>
 </dependency>
 ```
+{% endraw %}
 
 默认引入的Thymeleaf版本是2.1.6，如果想用最新版的Thymeleaf，需在`pom.xml`中添加`property`：
 
+{% raw %}
 ```xml
 <properties>
     <thymeleaf.version>3.0.9.RELEASE</thymeleaf.version> <!--Thymeleaf主程序-->
     <thymeleaf-layout-dialect.version>2.2.2</thymeleaf-layout-dialect.version> <!--布局功能-->
 </properties>
 ```
+{% endraw %}
 
 `Thymeleaf3`对应`layout2`,`Thymeleaf2`对应`layout1`。
 
 `pom.xml`样子：
 
+{% raw %}
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-
 	<groupId>com.jimcom</groupId>
 	<artifactId>spring-boot-01-web-restfulcrud</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
-
 	<name>spring-boot-01-web-restfulcrud</name>
 	<description>Demo project for Spring Boot</description>
-
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>2.0.4.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -127,32 +136,27 @@ SpringBoot推荐使用Thymeleaf模板引擎。
 		<thymeleaf.version>3.0.9.RELEASE</thymeleaf.version>
 		<thymeleaf-layout-dialect.version>2.2.2</thymeleaf-layout-dialect.version>
 	</properties>
-
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
-
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-
 		<!--引入jquery-->
 		<dependency>
 			<groupId>org.webjars</groupId>
 			<artifactId>jquery</artifactId>
 			<version>3.3.1</version>
 		</dependency>
-
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-thymeleaf</artifactId>
 		</dependency>
 	</dependencies>
-
 	<build>
 		<plugins>
 			<plugin>
@@ -163,21 +167,22 @@ SpringBoot推荐使用Thymeleaf模板引擎。
 	</build>
 </project>
 ```
+{% endraw %}
 
 ### 2.Thymeleaf的使用和语法
 
 Thymeleaf的默认规则都在`ThymeleafPropertiese`这个里面封装着。
 
+{% raw %}
 ```java
 @ConfigurationProperties(prefix = "spring.thymeleaf")
 public class ThymeleafProperties {
-
 	private static final Charset DEFAULT_ENCODING = StandardCharsets.UTF_8;
-
 	public static final String DEFAULT_PREFIX = "classpath:/templates/";
 	// 只要将HTML页面放在classpath:/templates/,Thymeleaf就会自动渲染
 	public static final String DEFAULT_SUFFIX = ".html";
 ```
+{% endraw %}
 
 `Thymeleaf`语法具体看[Thymeleaf官网](https://www.thymeleaf.org/)。
 
@@ -185,6 +190,7 @@ public class ThymeleafProperties {
 
 导入`thymeleaf`的名称空间：`xmlns:th="http://www.thymeleaf.org"`。
 
+{% raw %}
 ```html
 // classpath:/templates/success.html
 <!DOCTYPE html>
@@ -201,28 +207,25 @@ public class ThymeleafProperties {
 </body>
 </html>
 ```
+{% endraw %}
 
 控制器：
 
+{% raw %}
 ```java
 // com.jimcom.springboot.controller.HelloController.java
 package com.jimcom.springboot.controller;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import java.util.Map;
-
 @Controller
 public class HelloController {
-
     @ResponseBody
     @RequestMapping("/hello")
     public String hello() {
         return "Hello World";
     }
-
     @RequestMapping("/success")
     public String success(Map<String, Object> map) {
         map.put("hello", "你好");
@@ -230,6 +233,7 @@ public class HelloController {
     }
 }
 ```
+{% endraw %}
 
 #### 2.语法规则
 
@@ -243,6 +247,7 @@ public class HelloController {
 
 1. 表达式
 
+{% raw %}
 ```properties
 Simple expressions:
     Variable Expressions: ${...}：获取变量值，OGNL
@@ -284,7 +289,6 @@ Simple expressions:
     	@{/order/process(execId=${execId},execType='FAST')}
     Fragment Expressions: ~{...}：片段引用表达式
     	<div th:insert="~{commons :: main}">...</div>
-    	
 Literals:字面量
     Text literals: 'one text', 'Another one!',…
     Number literals: 0, 34, 3.0, 12.3,…
@@ -310,11 +314,13 @@ Conditional operators:条件运算，三元运算符
 Special tokens:特殊操作
 	No-Operation: _ 没有操作
 ```
+{% endraw %}
 
 例子：
 
 控制器：往视图里传入值：hello, users。
 
+{% raw %}
 ```java
 @Controller
 public class HelloController {
@@ -326,9 +332,11 @@ public class HelloController {
     }
 }
 ```
+{% endraw %}
 
 success.html：使用传进来的值。
 
+{% raw %}
 ```html
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
@@ -337,15 +345,14 @@ success.html：使用传进来的值。
     <title>success</title>
 </head>
 <body>
-
 <!--每次遍历都会生成当前这个标签，遍历传进来的users，每次遍历取得的值是user-->
 <h1 th:th="${user}" th:each="user:${users}"></h1>
-
 <h1> <!--[[...]]是行内写法，还有[()]。[[]]转义，[()]不转义-->
     <span th:each="user:${users}">[[${user}]]</span>
 </h1>
 </body>
 </html>
 ```
+{% endraw %}
 
-{% endraw %}  
+

@@ -4,7 +4,7 @@ category: [微信小程序]
 tag: [微信小程序, 学习笔记]
 title: 微信小程序学习笔记6
 ---
-{% raw %}
+
 ## 九、发布
 #### 1. [用户体验](https://developers.weixin.qq.com/ebook?action=get_post_info&docid=0002ac4c980cb0bb0086b37695b80a#_ftn3)
 * 导航清晰
@@ -36,6 +36,7 @@ title: 微信小程序学习笔记6
 * 不频繁调用setData。
 * setData数据量少一些。
 * 与界面渲染无关的数据最好不要设置在data中，可以考虑设置在page对象的其他字段下。
+{% raw %}
 ```javascript
 Page({
   onShow: function() {
@@ -61,6 +62,7 @@ Page({
   }
 })
 ```
+{% endraw %}
 * 视图层会接受用户事件，如点击事件、触摸事件等，再反馈给逻辑层。**去掉不必要的事件绑定（WXML中的bind和catch），从而减少通信的数据量和次数**。
 * 事件绑定时需要传输target和currentTarget的dataset，因而不要在节点的data前缀属性中放置过大的数据。
 #### 3. 视图层渲染
@@ -81,15 +83,17 @@ Page({
 WXML面板对渲染层WebView中真实的DOM树做了一个最小树算法的裁剪之后，呈现出与WXML源码一致的节点树列表。
 ## 补充
 #### 1. wxml的data-\*属性
+{% raw %}
 ```html
 <view id="tapTest" data-hi="WeChat" bindtap="tapName"> Click me! </view>
 ```
+{% endraw %}
+{% raw %}
 ```javascript
 Page({
   tapName: function(event) {
     console.log(event)
   }})
-  
  // 输出：
 {
   "type":"tap",
@@ -125,13 +129,17 @@ Page({
     "clientY":14
   }]}
 ```
+{% endraw %}
 横转大，大转小：
 ![8ef22a36c47e2b96a7504163dd5b085f.png](/assets\images\wechat-applet-study-note\Image36.png)
 #### 2. pageX和clientX的区别
+{% raw %}
 ```html
 <!--indwx.wxml-->
 <view catchtap="click"></view>
 ```
+{% endraw %}
+{% raw %}
 ```javascript
 Page({
     click: function(event) {
@@ -140,9 +148,11 @@ Page({
     }
 })
 ```
+{% endraw %}
 ![3156eff3d67b50047c07041655d0b468.png](/assets\images\wechat-applet-study-note\Image37.png)
 #### 3. 数组的forEach终止
 **通过异常来终止。**
+{% raw %}
 ```javascript
 var array = [1, 2, 3];
 try {    
@@ -158,7 +168,9 @@ try {
     }
 }
 ```
+{% endraw %}
 测试了一下，如果数组的数据量不大的话，不用通过异常来终止，处理异常要花的时间也是很多的：
+{% raw %}
 ```javascript
 var array = [1, 2, 3];
 array.forEach(function(item, index) {
@@ -167,19 +179,23 @@ array.forEach(function(item, index) {
     }
 });
 ```
+{% endraw %}
 #### 4. bindtap事件与bindtouchstart和bindtouchend冲突
 **tap,touchstart,touchend的事件触发顺序为start→end→tap。问题在于catchtouchstart,catchtouchend后事件被阻止了，tap捕获不到。**
 想要实现点击“X”号后删除该组价的效果：
 ![b2fb8097c535b5ddda89c7545a3ac6b6.png](/assets\images\wechat-applet-study-note\Image38.png)
-```HTML
+{% raw %}
+```html
 <view class="big" catchtap="click3">
   <view class="mid" catchtouchstart="click2">
     <view class="small" catchtouchstart="click1"></view>
   </view>
 </view>
 ```
+{% endraw %}
 在small组件立即捕获touchstart事件就好了，不用tap。
 #### 5. 获取某个节点的信息
+{% raw %}
 ```javascript
 const query = wx.createSelectorQuery()
 query.select('#the-id').boundingClientRect()
@@ -188,8 +204,10 @@ query.exec(function(res){
   res[0].top       // #the-id节点的上边界坐标
   res[1].scrollTop // 显示区域的竖直滚动位置})
 ```
+{% endraw %}
 **不能声明两次。**
 #### 6. wx.chooseImage()是个异步接口
+{% raw %}
 ```javascript
 click: function(e){
     wx.chooseImage({ 
@@ -206,18 +224,23 @@ click: function(e){
     console.log('main arr:' + imgList.join(',')); // 这里的imgList数组为空，因为wx.chooseImage()异步，所以上面的wx.chooseImage()还没有执行完就执行这个语句了，这时候imgList还是空的
 }
 ```
+{% endraw %}
 #### 7. 字符串格式化
+{% raw %}
 ```javascript
 let a = 'Hello', b = 'world';
 let str = `这是一个测试的字符串：${a} ${b}`;
 console.log(str); // 这是一个测试的字符串：Hello world
 ```
+{% endraw %}
 **注意str里是反引号 `。**
 #### 8.组件穿透
+{% raw %}
 ```css
 pointer-events: none;
 ```
+{% endraw %}
 #### 8. scroll-view组件的滑动问题
 > scroll-y="false" 这个"false"是字符串，要把scroll-y设置成false，**可以使用scroll-y="{{false}}"**，这样子这个scroll-y的值才是布尔值，才能不滑动。
 比较：`scroll-y="false"`和`scroll-y="{{false}}"`。
-{% endraw %}  
+

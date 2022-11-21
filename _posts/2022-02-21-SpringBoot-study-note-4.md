@@ -4,19 +4,22 @@ category: [SprintBoot教程笔记]
 tag: [SpringBoot, 学习笔记] 
 title: 二、配置文件（Spring Boot教程笔记4）
 ---
-{% raw %}
+
 
 ## 4. 配置文件占位符
 
 1. 随机数
 
-   ```java
+{% raw %}
+```java
    ${random.value}, ${random.int}, ${random.long}, ${random.int(10)}, ${random.int[1024, 65536]}
-   ```
+```
+{% endraw %}
 
 2. 占位符获取之前配置的值，如果没有可以使用“：”指定的默认值
 
-   ```yml
+{% raw %}
+```yml
    person.last-name=zhangshan${random.int}
    person.age=23
    person.birth=2017/2/13
@@ -26,7 +29,8 @@ title: 二、配置文件（Spring Boot教程笔记4）
    # 获取之前配置的person.last-name的值,如果没有,person.dog.name默认等于"a"
    person.dog.name=${person.last-name:a} 
    person.dog.age=2 
-   ```
+```
+{% endraw %}
 
 ## 5.Profile 
 
@@ -48,23 +52,21 @@ application-dev.properties是dev环境的配置文件，application-prod.propert
 
 .yml可以用“---”划分文档块，每一份文档块的名字就是Spring下profiles的值，在主文档块是用spring->profiles->active指定激活哪个环境，这时候，resources里的配置文件只需要该.yml格式的配置文件就好。
 
+{% raw %}
 ```yml
 # application.yml
-
 # 主配置环境
 server:
   port: 8081
 spring:
   profiles:
     active: dev
-    
 ---
 # dev环境
 server:
   port: 8082
 spring:
   profiles: dev
-  
 ---
 # prod环境
 server:
@@ -72,6 +74,7 @@ server:
 spring:
   profiles: prod 
 ```
+{% endraw %}
 
 
 
@@ -79,17 +82,21 @@ spring:
 
 #### 1.在主配置文件中指定要切换到哪个环境 
 
+{% raw %}
 ```properties
 # /resources/application.properties
 # 指定激活dev环境（同路径下还有application-dev.properties配置文件,就是激活这一份配置文件）
 spring.profiles.active=dev
 ```
+{% endraw %}
 
 #### 2. 命令行参数
 
+{% raw %}
 ```shell
 --spring.profiles.active=dev  # 指定用dev环境
 ```
+{% endraw %}
 
 ![1532249242826](/assets/images/spring-boot-develop/1532249242826.png)
 
@@ -111,12 +118,14 @@ spring.profiles.active=dev
 
 Spring Boot启动会扫描以下位置的application.properties或application.yml文件作为Spring Boot的默认配置文件。
 
+{% raw %}
 ```shell
 - file:./config/ # 文件路径下的config文件夹下
 - file:./    # 文件路径下的
 - classpath:/config/ # 类路径下的config文件夹下
 - classpath:/   # 类路径下的
 ```
+{% endraw %}
 
 以上是按照优先级从高到低的顺序进行加载配置，所有位置的文件都会被加载，**互补配置**。
 
@@ -134,10 +143,12 @@ Spring Boot启动会扫描以下位置的application.properties或application.ym
 
 1. 命令行参数
 
-   ```shell
+{% raw %}
+```shell
    # --配置项=值，多个配置用空格分开
    java -jar spring-boot.jar --server.port=8080 --server.context-path=/abc
-   ```
+```
+{% endraw %}
 
 2. 来自java:comp/env的NDI属性
 
@@ -171,7 +182,8 @@ Spring Boot启动会扫描以下位置的application.properties或application.ym
 
    * List<String> configurations = getCandidateConfigurations(annotationMetadata, attributes);获取候选的配置。原理：
 
-     * ```yava
+{% raw %}
+```java
        /**
        * 扫描所有jar包类路径下的META-INF/spring.factories，
        * 然后把扫描到的内容包装成properties对象。
@@ -179,20 +191,24 @@ Spring Boot启动会扫描以下位置的application.properties或application.ym
        * 然后将他们添加在容器中。
        */
        SpringFactoriesLoader.loadFactoryNmaes()
-       ```
+```
+{% endraw %}
 
      **将类路径下META-INF/spring.factories里面配置的所有EnableAutoConfiguration的值加入到了容器中。**
 
      * 来到Maven：org.springframework.boot:spring-boot-autoconfigure:1.5.14.RElEASE的jar包中，在里面的META-INF里找到spring.factories中有：
 
-       ```java
+{% raw %}
+```java
        # Auto Configure
        org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-       ```
+```
+{% endraw %}
 
        **将类路径下META-INF/spring.factories里面配置的所有EnableAutoConfiguration的值加入到容器中。**
 
-       ```java
+{% raw %}
+```java
        # Auto Configure
        org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
        # 底下就全是EnableAutoConfiguration的值
@@ -201,7 +217,8 @@ Spring Boot启动会扫描以下位置的application.properties或application.ym
        org.springframework.boot.autoconfigure.amqp.RabbitAutoConfiguration,\
        org.springframework.boot.autoconfigure.batch.BatchAutoConfiguration,\
        ......
-       ```
+```
+{% endraw %}
 
        每一个xxxAutoConfiguration类都是容器中的一个组件，都加入到容器中，用他们来做自动配置。
 
@@ -211,22 +228,20 @@ Spring Boot启动会扫描以下位置的application.properties或application.ym
 
        ***IDEA全局搜索类：Ctrl+N。***
 
-       ```java
+{% raw %}
+```java
        @Configuration // 这是一个配置类，跟配置文件一样，也可以给容器中添加组件。
        @EnableConfigurationProperties(HttpEncodingProperties.class) // 启动指定类的ConfigurationProperties功能(解释在下面)
        @ConditionalOnWebApplication // Spring底层的@Conditional注解，根据不同条件，如果满足指定条件，整个配置类里面的配置就会生效。@ConditionalOnWebApplication ==> 判断当前应用是否是Web应用
        @ConditionalOnClass(CharacterEncodingFilter.class) // 判断当前项目有没有CharacterEncodingFilter这个类
        @ConditionalOnProperty(prefix = "spring.http.encoding", value = "enabled", matchIfMissing = true) // 判断配置文件中是否存在spring.http.encoding.enabled这个配置（prefix = "spring.http.encoding", value = "enabled"），如果配置文件中没有该配置，那么spring.http.encoding.enabled默认为true（matchIfMissing）。
        public class HttpEncodingAutoConfiguration {
-           
            // 表示已经和SpringBoot的配置文件映射了，故properties就能取到封装好的配置文件里的配置
            private final HttpEncodingProperties properties;
-           
            // 这个类只有一个有参构造器，在只有一个有参构造器的情况下，参数的值就会从容器中拿，因为有前面的@EnableConfigurationProperties(HttpEncodingProperties.class)这个注解，所以能拿到，这个注解还能将HttpEncodingProperties加入到ioc容器中
         public HttpEncodingAutoConfiguration(HttpEncodingProperties properties) {
           this.properties = properties;
         }
-       
         @Bean // 给容器中添加characterEncodingFilter组件，这个组件的某些值需要从properties中获取
         @ConditionalOnMissingBean(CharacterEncodingFilter.class) // 判断出容器中没有CharacterEncodingFilter这个组件，才可以将该组件添加到容器里
         public CharacterEncodingFilter characterEncodingFilter() {
@@ -236,17 +251,20 @@ Spring Boot启动会扫描以下位置的application.properties或application.ym
           filter.setForceResponseEncoding(this.properties.shouldForce(Type.RESPONSE));
           return filter;
         }
-       ```
+```
+{% endraw %}
 
        @ConditionalOnWebApplication, @ConditionalOnClass(CharacterEncodingFilter.class), @ConditionalOnProperty(prefix = "spring.http.encoding", value = "enabled", matchIfMissing = true) ==> 根据当前不同的条件判断，决定这个HttpEncodingAutoConfiguration配置类是否生效。
 
        一旦这个配置类生效，这个配置类就会给容器添加各种组件，这些组件的属性是从对应的xxxxProperties类中获取的，这些类里面的每一个属性又是和配置文件中对应的配置绑定的。
 
-       ```java
+{% raw %}
+```java
        // 解释上面的@EnableConfigurationProperties(HttpEncodingProperties.class)这个注解
        @ConfigurationProperties(prefix = "spring.http.encoding") // 从配置文件中获取指定的值和Bean的属性进行绑定。由prefix = "spring.http.encoding"可看成，我们配置文件可以配spring.http.encoding这个属性，可以配什么值，需要看HttpEncodingProperties这个类有什么值可以配。
        public class HttpEncodingProperties {
-       ```
+```
+{% endraw %}
 
        **所有在配置文件中能配置的属性都是在xxxxProperties类中封装着，配置文件能配置什么就可以参照某个功能对应的这个xxxxProperties类。**
 
@@ -256,10 +274,12 @@ Spring Boot启动会扫描以下位置的application.properties或application.ym
 
 2. **给容器中自动配置类添加组件的时候，会从properties类中获取某些属性，而这些属性的值，我们就可以在配置文件中指定。**
 
-   ```java
+{% raw %}
+```java
    xxxxAutoConfiguration：自动配置类，给容器中添加组件
    xxxxProperties：封装配置文件中相关的属性
-   ```
+```
+{% endraw %}
 
 ## 9.自动配置类是否启用
 
@@ -286,32 +306,32 @@ Spring Boot启动会扫描以下位置的application.properties或application.ym
 
 可以通过在application.properties里添加配置debug=true，然后运行系统，系统就会在在控制台里打印“自动配置报告”。
 
+{% raw %}
 ```properties
 # application.properties
 debug=true # 开启SringBoot的Debug模式
 ```
+{% endraw %}
 
+{% raw %}
 ```shell
 # 自动配置报告
 =========================
 AUTO-CONFIGURATION REPORT
 =========================
-
 Positive matches: # 匹配上的，启用的自动配置类
 -----------------
-
    DispatcherServletAutoConfiguration matched:
       - @ConditionalOnClass found required class 'org.springframework.web.servlet.DispatcherServlet'; @ConditionalOnMissingClass did not find unwanted class (OnClassCondition)
       - @ConditionalOnWebApplication (required) found StandardServletEnvironment (OnWebApplicationCondition)
 ......
-
 Negative matches: # 没有匹配上的，没启用的自动配置类
 -----------------
-
    ActiveMQAutoConfiguration:
       Did not match:
          - @ConditionalOnClass did not find required classes 'javax.jms.ConnectionFactory', 'org.apache.activemq.ActiveMQConnectionFactory' (OnClassCondition)
 ......
 ```
+{% endraw %}
 
-{% endraw %}  
+

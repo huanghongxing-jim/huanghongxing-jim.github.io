@@ -4,7 +4,7 @@ category: [SprintBoot教程笔记]
 tag: [SpringBoot, 学习笔记] 
 title: 五、开发笔记（Spring Boot教程笔记8）
 ---
-{% raw %}
+
 
 # 五、开发笔记
 
@@ -12,39 +12,35 @@ title: 五、开发笔记（Spring Boot教程笔记8）
 
 * 在控制器中添加方法
 
-  ```java
+{% raw %}
+```java
   package com.jimcom.springboot.controller;
-  
   import org.springframework.stereotype.Controller;
   import org.springframework.web.bind.annotation.RequestMapping;
   import org.springframework.web.bind.annotation.ResponseBody;
-  
   import java.util.Arrays;
   import java.util.Map;
-  
   @Controller
   public class HelloController {
-  
       @RequestMapping({"/", "index.html"})
       public String index(){
           return "index"; // 访问模板引擎里的index视图
       }
   }
-  ```
+```
+{% endraw %}
 
 * 添加配置
 
-  ```java
+{% raw %}
+```java
   package com.jimcom.springboot.config;
-  
   import org.springframework.context.annotation.Configuration;
   import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
   import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
-  
   @Configuration
   public class MyConfig extends WebMvcConfigurerAdapter {
       public WebMvcConfigurerAdapter webMvcConfigurerAdapter() {
-  
           WebMvcConfigurerAdapter adapter = new WebMvcConfigurerAdapter() {
               @Override
               public void addViewControllers(ViewControllerRegistry registry) {
@@ -56,29 +52,28 @@ title: 五、开发笔记（Spring Boot教程笔记8）
           return adapter;
       }
   }
-  ```
+```
+{% endraw %}
 
 ## 2.添加静态资源
 
+{% raw %}
 ```html
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
     <head>
         <title>success</title>
-
         <!--Bootstrap core CSS-->
         <link th:href="@{/webjars/bootstrap/4.0.0/css/bootstrap.css}">
         <!--My CSS-->
         <link th:href="@{/asserts/css/mycss.css}">
-
     </head>
     <body>
-    
         <img th:src="@{/asserts/img/im.png}">
-    
     </body>
 </html>
 ```
+{% endraw %}
 
 * `bootstrap`这些公共样式可以通过`webjar`来引用，上面是已经在`pom.xml`添加`bootstrap`的`webjar`依赖了，所以要那样引用`bootstrap`。
 
@@ -88,14 +83,15 @@ title: 五、开发笔记（Spring Boot教程笔记8）
 
   用`th:href`或者`th:src`的好处：更改访问路径后，静态资源文件里的路径不需要改变。
 
-  ```properties
+{% raw %}
+```properties
   # application.properties
-  
   # 更改了访问路径，要带上/jim才可以访问：http://127.0.0.1:8888/jim
   # 如果静态资源文件里用了th:href或者th:src的话，那么这些文件里的路径设置就不用
   # 更改了
   server.context-path=/jim
-  ```
+```
+{% endraw %}
 
 ## 3.[国际化](https://www.bilibili.com/video/av20965295/?p=35)
 
@@ -107,27 +103,26 @@ title: 五、开发笔记（Spring Boot教程笔记8）
 
 2. 登陆错误消息的显示
 
-   ```html
+{% raw %}
+```html
    <p th:text="${msg}" th:if="${not #strings.isEmpty(msg)}"></p>
-   ```
+```
+{% endraw %}
 
 3. 登陆控制器
 
-   ```java
+{% raw %}
+```java
    package com.jimcom.springboot.controller;
-   
    import org.springframework.stereotype.Controller;
    import org.springframework.web.bind.annotation.PostMapping;
    import org.springframework.web.bind.annotation.RequestMapping;
    import org.springframework.web.bind.annotation.RequestMethod;
    import org.springframework.web.bind.annotation.RequestParam;
    import org.thymeleaf.util.StringUtils;
-   
    import java.util.Map;
-   
    @Controller
    public class LoginController {
-       
        // @RequestMapping(value = "/user/login", method = RequestMethod.POST)
        @PostMapping(value = "/user/login") // post方式提交的数据
        public String login(@RequestParam("username") String username, // @RequestParm表示username只能来自请求中
@@ -144,7 +139,8 @@ title: 五、开发笔记（Spring Boot教程笔记8）
            }
        }
    }
-   ```
+```
+{% endraw %}
 
    ​	其他方式提交数据：`@DeleteMapping`, `@PutMapping`, `@GetMapping`。
 
@@ -152,15 +148,13 @@ title: 五、开发笔记（Spring Boot教程笔记8）
 
 5. 添加拦截器：
 
-   ```java
+{% raw %}
+```java
    package com.jimcom.springboot.component;
-   
    import org.springframework.web.servlet.HandlerInterceptor;
    import org.springframework.web.servlet.ModelAndView;
-   
    import javax.servlet.http.HttpServletRequest;
    import javax.servlet.http.HttpServletResponse;
-   
    /**
     * 登录检查
     */
@@ -180,18 +174,15 @@ title: 五、开发笔记（Spring Boot教程笔记8）
                return true;
            }
        }
-   
        @Override
        public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
-   
        }
-   
        @Override
        public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
-   
        }
    }
-   ```
+```
+{% endraw %}
 
    ​	位置：
 
@@ -199,22 +190,19 @@ title: 五、开发笔记（Spring Boot教程笔记8）
 
 6. 控制器里要添加一个`session`
 
-   ```java
+{% raw %}
+```java
    package com.jimcom.springboot.controller;
-   
    import org.springframework.stereotype.Controller;
    import org.springframework.web.bind.annotation.PostMapping;
    import org.springframework.web.bind.annotation.RequestMapping;
    import org.springframework.web.bind.annotation.RequestMethod;
    import org.springframework.web.bind.annotation.RequestParam;
    import org.thymeleaf.util.StringUtils;
-   
    import javax.servlet.http.HttpSession;
    import java.util.Map;
-   
    @Controller
    public class LoginController {
-   
        @PostMapping(value = "/user/login")
        public String login(@RequestParam("username") String username,
                            @RequestParam("password") String password,
@@ -229,27 +217,26 @@ title: 五、开发笔记（Spring Boot教程笔记8）
            }
        }
    }
-   ```
+```
+{% endraw %}
 
 7. 页面如何获取到`session`数据：
 
-   ```html
+{% raw %}
+```html
    <!DOCTYPE html>
    <html lang="en" xmlns:th="http://www.thymeleaf.org">
        <head>
            <title>success</title>
-   
            <!--Bootstrap core CSS-->
            <link th:href="@{/webjars/bootstrap/4.0.0/css/bootstrap.css}">
            <!--My CSS-->
            <link th:href="@{/asserts/css/mycss.css}">
-   
        </head>
        <body>
-   
        [[${session.loginUser}]]已登录 <!--session.xxx-->
-   
        </body>
    </html>
-   ```
-{% endraw %} 
+```
+{% endraw %}
+

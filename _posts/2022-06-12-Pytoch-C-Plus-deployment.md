@@ -4,7 +4,7 @@ category: [模型部署]
 tag: [Pytorch C/C++, torch.jit, 学习笔记] 
 title: Pytorch C/C++模型部署
 ---
-{% raw %}
+
 
 # 一、环境
 
@@ -21,39 +21,34 @@ title: Pytorch C/C++模型部署
 
 2. 运行：  
 
+{% raw %}
 ```python
 import torch
 import torchvision
-
 model = torchvision.models.resnet18(pretrained=True)
-
 example = torch.rand(1, 3, 224)
-
 traced_script_module = torch.jit.trace(model, example)
-
 traced_script_module.save("traced_resnet_model.pt")
 ```
+{% endraw %}
 
-```C++
+{% raw %}
+```c++
 #include <torch/script.h> ​
 #include <torch/torch.h> ​
 #include <iostream>
 #include <memory>
-
 int main(int argc, const char* argv[]) {
-
     torch::jit::script::Module model;
     model = torch::jit::load("traced_resnet_model.pt", at::kCUDA);
-
     std::vector<torch::jit::IValue> inputs;
     inputs.push_back(torch::ones({ 1, 3, 224, 224 }, at::kCUDA));
-
     at::Tensor output = model.forward(inputs).toTensor();
     std::cout << output.slice(1, 0, 5) << "\n";
-
     return 0;
 }
 ```
+{% endraw %}
 
 **注意：TensorFlow+Windows+Visual Studio比较麻烦，要手动搞CMake，Torch C/C++只需要用Visual Studio 2019的libtorch插件就行。**
 
@@ -67,6 +62,6 @@ int main(int argc, const char* argv[]) {
 
 **torch.jit有两种生成方式：torch.jit.trace和torch.jit.script，前者不能有if、while等控制流，后者可以有。**
 
-{% endraw %}  
+
 
 

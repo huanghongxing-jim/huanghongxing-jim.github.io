@@ -4,12 +4,13 @@ category: [微信小程序]
 tag: [微信小程序, 学习笔记, JavaScript]
 title: 微信小程序学习笔记3
 ---
-{% raw %}
+
 # 四、BOM
 浏览器对象模型（Browser Object Model (BOM)）允许 JavaScript 与 浏览器 对话。
 DOM ==> 文档
 BOM ==> 浏览器
 1. Window(代表浏览器的窗口)
+{% raw %}
 ```javascript
 // document是window属性
 window.document.getElementById("header");
@@ -19,9 +20,11 @@ document.getElementById("header");
 window.innerHeight
 window.innerWidth
 ```
+{% endraw %}
 ![731b7b3b009163dba8aefc3b4bc2331d.png](/assets/images/wechat-applet-study-note/Image14.png)
 2. Screen（用户屏幕信息）
 screen == window.screen
+{% raw %}
 ```javascript
 screen.width
 screen.height
@@ -30,17 +33,21 @@ screen.availHeight
 screen.colorDepth
 screen.pixelDepth
 ```
+{% endraw %}
 3. Location(页面URL)
 location == window.location
 ![bc0988dafff80a5cb9f41a22d5c8070e.png](/assets/images/wechat-applet-study-note/Image15.png)
 4. History
 history == window.history
+{% raw %}
 ```javascript
 history.back(); // 浏览器后退
 history.forward(); // 浏览器前进
 ```
+{% endraw %}
 5. navigator(访问者的信息)
 navigator == window.navigator
+{% raw %}
 ```javascript
 navigator.appName // 浏览器名称
 navigator.appCodeName // 浏览器代码名称
@@ -53,7 +60,9 @@ navigator.language // 浏览器语言
 navigator.onLine // 浏览器是否在线
 navigator.javaEnabled // java是否启用
 ```
+{% endraw %}
 6. 弹出框
+{% raw %}
 ```javascript
 // 警告
 window.alert("...");
@@ -72,9 +81,11 @@ if (person != null) {
 // 换行
 alert("Hello\nHow are you?");
 ```
+{% endraw %}
 7. 定时
 `window.setTimeout(function, milliseconds)`：在等待指定的毫秒数后执行函数，一次。
 `windows.setInterval(function, milliseconds)`：等同于 setTimeout()，但持续重复执行该函数。
+{% raw %}
 ```javascript
 // 停止执行
 myVar = setTimeout(function, milliseconds);
@@ -82,12 +93,16 @@ clearTimeout(myVar);
 myVar = setInterval(function, milliseconds);
 clearInterval(myVar);
 ```
+{% endraw %}
 8. Cookie（在网页中存储用户信息）
+{% raw %}
 ```javascript
 // 创建cookie
 document.cookie = "username=John Doe; expires=Sun, 31 Dec 2017 12:00:00 UTC";
 ```
+{% endraw %}
 # 五、JSON
+{% raw %}
 ```javascript
 // 使用jason方法，不用导包
 var myObj = { name:"Bill Gates",  age:62, city:"Seattle" };
@@ -107,4 +122,5 @@ text = localStorage.getItem("testJSON");
 obj =  JSON.parse(text);
 document.getElementById("demo").innerHTML = obj.name;
 ```
-{% endraw %}  
+{% endraw %}
+
