@@ -12,7 +12,7 @@ title: Larave学习笔记1
 
 **设置数据库编码, 更改数据库的编码为utf8mb4:***
 
-***修改mysql配置文件(Linux为my.cnf, windows为my.ini, my.cnf一般在etc/mysql/my.cnf位置)。***
+**修改mysql配置文件(Linux为my.cnf, windows为my.ini, my.cnf一般在etc/mysql/my.cnf位置)。**
 
 {% raw %}
 ```mysql
@@ -29,7 +29,7 @@ init_connect='SET NAMES utf8mb4'
 ```
 {% endraw %}
 
-***mysql查询该表的所有列：***
+**mysql查询该表的所有列：**
 
 {% raw %}
 ```mysql
@@ -186,8 +186,9 @@ Route::any('multy', function() {
 
 ### 4. 视图(输出视图)
 
-
-* 控制器中直接view（'<视图名称>');
+{% raw %}
+* 控制器中直接view("视图名称");
+{% endraw %}
 
 {% raw %}
 ```php

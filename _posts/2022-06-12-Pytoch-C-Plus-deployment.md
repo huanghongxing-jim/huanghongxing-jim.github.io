@@ -9,7 +9,7 @@ title: Pytorch C/C++模型部署
 # 一、环境
 
 1. 系统： `Windows 10`
-2. 软件：`Visual Stuido 2019`+`VSIXTorch.vsix`。**[VSIXTorch.vsix](/assets\attachments\network-deployment-pytorch-c\VSIXTorch.vsix)** 只支持到 `Visual Studio 2019`。
+2. 软件：`Visual Stuido 2019`+`VSIXTorch.vsix`。**[VSIXTorch.vsix](/assets/attachments/network-deployment-pytorch-c/VSIXTorch.vsix)** 只支持到 `Visual Studio 2019`。
 3. 下载 `libtorch`：![](/assets\images\network-deployment-pytorch-c/2022-06-12-20-52-53.png)
 
 ## 二、例程
