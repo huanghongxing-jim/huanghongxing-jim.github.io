@@ -10,6 +10,10 @@
   type: email
   icon: 'fas fa-envelope'
   noblank: true            # open link in current tab
+-
+  type: bilibili
+  icon: 'fab fa-bilibili'
+  url: 'https://space.bilibili.com/'
 # -
 #   type: rss
 #   icon: 'fas fa-rss'

@@ -21,10 +21,10 @@ timezone: Asia/Shanghai
 
 title: Huang Hongxing                       
 
-tagline: "你的朋友圈好久没有提及你的快乐了，你的梦想、浪漫、晚霞和音乐都没了，怎么了？是不是和我一样进厂了？"
+tagline: "嵌入式开发 | 视频创作 | 技术分享"
 
 description: >-                        # used by seo meta and the atom feed
-  Huang Hongxing's Blog.
+  Huang Hongxing的个人技术博客，专注于嵌入式Linux开发、单片机编程和技术分享。
 
 # fill in the protocol & hostname for your site, e.g., 'https://username.github.io'
 url: https://huanghongxing-jim.github.io
