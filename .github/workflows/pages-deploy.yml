@@ -42,7 +42,7 @@ jobs:
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 3 # reads from a '.ruby-version' or '.tools-version' file if 'ruby-version' is omitted
+          ruby-version: '3.1' # Pin to 3.1 for compatibility with older gems (nokogiri 1.13.x requires < 3.2)
           bundler-cache: true
 
       - name: Build site
